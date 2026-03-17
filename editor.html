@@ -119,10 +119,18 @@
   .action-chip.locator:hover{background:rgba(62,99,221,.04);border-color:rgba(37,99,235,.4)}
   .action-chip svg.lu{width:10px;height:10px;opacity:.6}
 
-  /* Inline edit mode for chips */
-  .chip-edit-input{font-size:11px;font-weight:500;font-family:var(--sans);border:none;outline:none;padding:2px 7px;border-radius:3px;min-width:60px;max-width:200px}
-  .chip-edit-input.locator-input{color:var(--blue-text);background:rgba(62,99,221,.06);box-shadow:0 0 0 2px rgba(62,99,221,.2)}
-  .chip-edit-input.variable-input{color:var(--yellow-text);background:rgba(234,179,8,.08);box-shadow:0 0 0 2px rgba(234,179,8,.25)}
+  /* Locator popover */
+  .locator-popover{position:absolute;top:calc(100% + 6px);left:0;background:var(--bg-white);border:1px solid var(--border-strong);border-radius:var(--radius-sm);box-shadow:0 8px 24px rgba(0,0,0,.12);padding:14px;width:300px;z-index:60;display:none}
+  .locator-popover.show{display:block}
+  .lp-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--text-muted);margin-bottom:4px}
+  .lp-name{font-size:13px;color:var(--text);margin-bottom:12px}
+  .lp-input{width:100%;font-family:var(--mono);font-size:12px;padding:7px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-xs);color:var(--text);background:var(--bg);outline:none;transition:border-color var(--transition),box-shadow var(--transition)}
+  .lp-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(62,99,221,.1)}
+  .lp-footer{display:flex;align-items:center;gap:6px;margin-top:10px}
+  .lp-footer .btn{font-size:11px;padding:5px 10px}
+  .lp-status{font-size:11px;margin-left:auto;display:flex;align-items:center;gap:4px}
+  .lp-status.valid{color:var(--green-text)}
+  .lp-status.invalid{color:var(--red-text)}
 
   /* Variable dropdown */
   .var-dropdown{position:absolute;background:var(--bg-white);border:1px solid var(--border-strong);border-radius:var(--radius-sm);box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px;min-width:180px;z-index:60;display:none}
@@ -244,13 +252,13 @@
             </div>
             <div class="step-original">Ввести логин и пароль, нажать кнопку Login</div>
             <div class="step-block">
-              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>login</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле username</span></div>
-              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>pass</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле password</span></div>
-              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-pointer"/></svg></span><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Login</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>login</span><span class="action-text">в</span><span class="action-chip locator" data-locator="[data-qa="input-username"]"><svg class="lu"><use href="#i-target"/></svg>поле username</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>pass</span><span class="action-text">в</span><span class="action-chip locator" data-locator="[data-qa="input-password"]"><svg class="lu"><use href="#i-target"/></svg>поле password</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-pointer"/></svg></span><span class="action-text">Нажать на</span><span class="action-chip locator" data-locator="button.btn-login"><svg class="lu"><use href="#i-target"/></svg>кнопка Login</span></div>
             </div>
             <div class="step-original">Пользователь авторизован, открыта главная страница</div>
             <div class="step-block assert-block">
-              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-eye"/></svg></span><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>главная страница</span><span class="action-text">отображается</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-eye"/></svg></span><span class="action-text">Проверить что</span><span class="action-chip locator" data-locator=".main-dashboard"><svg class="lu"><use href="#i-target"/></svg>главная страница</span><span class="action-text">отображается</span></div>
             </div>
           </div>
 
@@ -278,11 +286,11 @@
             </div>
             <div class="step-original">Ввести новое имя в поле name</div>
             <div class="step-block">
-              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>new-name</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле name</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>new-name</span><span class="action-text">в</span><span class="action-chip locator" data-locator="[name="name"]"><svg class="lu"><use href="#i-target"/></svg>поле name</span></div>
             </div>
             <div class="step-original">Кнопка Save активна, нажать Save</div>
             <div class="step-block assert-block">
-              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-check-sq"/></svg></span><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Save</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-check-sq"/></svg></span><span class="action-text">Нажать на</span><span class="action-chip locator" data-locator="button:has-text("Save")"><svg class="lu"><use href="#i-target"/></svg>кнопка Save</span></div>
             </div>
           </div>
 
@@ -310,7 +318,7 @@
             </div>
             <div class="step-original">Отображается уведомление «Сохранено»</div>
             <div class="step-block assert-block">
-              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-eye"/></svg></span><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>уведомление «Сохранено»</span><span class="action-text">отображается</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-eye"/></svg></span><span class="action-text">Проверить что</span><span class="action-chip locator" data-locator=".toast-notification"><svg class="lu"><use href="#i-target"/></svg>уведомление «Сохранено»</span><span class="action-text">отображается</span></div>
             </div>
           </div>
 
@@ -413,7 +421,72 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
 
   if (typeof hljs !== 'undefined') hljs.highlightAll();
 
-  // ── INLINE CHIP EDITING ──
+  // ── LOCATOR POPOVER ──
+  let activePopover = null;
+
+  function closePopover() {
+    if (activePopover) { activePopover.remove(); activePopover = null; }
+  }
+
+  document.querySelectorAll('.action-chip.locator').forEach(chip => {
+    chip.style.position = 'relative';
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closePopover();
+
+      const name = chip.textContent.trim();
+      const locator = chip.dataset.locator || '';
+
+      const pop = document.createElement('div');
+      pop.className = 'locator-popover show';
+      pop.innerHTML =
+        '<div class="lp-label">Название</div>' +
+        '<div class="lp-name">' + name + '</div>' +
+        '<div class="lp-label">Локатор</div>' +
+        '<input class="lp-input" type="text" value="' + locator.replace(/"/g, '&quot;') + '" spellcheck="false">' +
+        '<div class="lp-footer">' +
+          '<button class="btn primary lp-save">Применить</button>' +
+          '<button class="btn lp-check">Проверить</button>' +
+          '<span class="lp-status"></span>' +
+        '</div>';
+
+      chip.appendChild(pop);
+      activePopover = pop;
+
+      const input = pop.querySelector('.lp-input');
+      input.focus();
+      input.select();
+
+      // Prevent clicks inside popover from closing it
+      pop.addEventListener('click', (ev) => ev.stopPropagation());
+
+      // Save
+      pop.querySelector('.lp-save').addEventListener('click', () => {
+        chip.dataset.locator = input.value;
+        closePopover();
+      });
+
+      // Enter to save
+      input.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') { chip.dataset.locator = input.value; closePopover(); }
+        if (ev.key === 'Escape') closePopover();
+      });
+
+      // Check (simulated)
+      pop.querySelector('.lp-check').addEventListener('click', () => {
+        const status = pop.querySelector('.lp-status');
+        status.textContent = '⏳ Проверка…';
+        status.className = 'lp-status';
+        setTimeout(() => {
+          const isValid = input.value.length > 2;
+          status.innerHTML = isValid ? '✓ Найден' : '✕ Не найден';
+          status.className = 'lp-status ' + (isValid ? 'valid' : 'invalid');
+        }, 800);
+      });
+    });
+  });
+
+  // ── VARIABLE DROPDOWN ──
   const variables = [
     { key: 'login', val: 'admin@testit.com' },
     { key: 'pass', val: '••••••••' },
@@ -421,46 +494,11 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
     { key: 'base_url', val: 'http://158.160.161.239' }
   ];
 
-  // Locator: click → inline input
-  document.querySelectorAll('.action-chip.locator').forEach(chip => {
-    chip.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (chip.querySelector('input')) return;
-      const icon = chip.querySelector('svg.lu');
-      const text = chip.textContent.trim();
-      const iconHTML = icon ? icon.outerHTML : '';
-
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.className = 'chip-edit-input locator-input';
-      input.value = text;
-      input.style.width = Math.max(60, text.length * 7) + 'px';
-
-      chip.textContent = '';
-      if (iconHTML) chip.insertAdjacentHTML('afterbegin', iconHTML);
-      chip.appendChild(input);
-      input.focus();
-      input.select();
-
-      function finish() {
-        const val = input.value.trim() || text;
-        chip.textContent = '';
-        if (iconHTML) chip.insertAdjacentHTML('afterbegin', iconHTML);
-        chip.appendChild(document.createTextNode(val));
-      }
-      input.addEventListener('blur', finish);
-      input.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Enter') { input.blur(); }
-        if (ev.key === 'Escape') { input.value = text; input.blur(); }
-      });
-    });
-  });
-
-  // Variable: click → dropdown to pick variable
   let activeVarDropdown = null;
   document.querySelectorAll('.action-chip.variable').forEach(chip => {
     chip.addEventListener('click', (e) => {
       e.stopPropagation();
+      closePopover();
       if (activeVarDropdown) { activeVarDropdown.remove(); activeVarDropdown = null; }
 
       const dd = document.createElement('div');
@@ -476,6 +514,7 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
       dd.style.left = '0';
       activeVarDropdown = dd;
 
+      dd.addEventListener('click', (ev) => ev.stopPropagation());
       dd.querySelectorAll('.var-dropdown-item').forEach(item => {
         item.addEventListener('click', (ev) => {
           ev.stopPropagation();
@@ -493,6 +532,7 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
   });
 
   document.addEventListener('click', () => {
+    closePopover();
     if (activeVarDropdown) { activeVarDropdown.remove(); activeVarDropdown = null; }
   });
 </script>
