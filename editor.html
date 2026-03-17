@@ -64,7 +64,7 @@
   .iconbar-btn.active{color:var(--text);background:rgba(0,0,0,.06)}
   .iconbar-btn.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:var(--text);border-radius:0 2px 2px 0}
 
-  .left-panel{width:440px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+  .left-panel{width:500px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
   .panel-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;height:46px}
   .panel-title{font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.03em}
   .panel-header-right{margin-left:auto;display:flex;align-items:center;gap:4px}
@@ -72,7 +72,7 @@
   .tab-pane{display:none;height:100%;flex-direction:column}.tab-pane.active{display:flex}
 
   /* ── STEPS ── */
-  .steps-list{flex:1;padding:0 12px 24px;overflow-y:auto;display:flex;flex-direction:column}
+  .steps-list{flex:1;padding:0 0 24px;overflow-y:auto;display:flex;flex-direction:column}
   .steps-list::-webkit-scrollbar{width:5px}
   .steps-list::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:3px}
 
@@ -91,8 +91,8 @@
   .step-status-icon.draft{color:var(--neutral)}
   .step-status-icon.generated{color:var(--blue)}
   .step-status-icon.error{color:var(--red)}
-  .step-label{font-size:12.5px;font-weight:600;color:var(--text);flex:1;display:flex;align-items:baseline;gap:5px}
-  .step-summary{font-weight:400;color:var(--text-muted);font-size:12px}
+  .step-label{font-size:15px;font-weight:600;color:var(--text);flex:1;display:flex;align-items:baseline;gap:5px}
+  .step-summary{font-weight:600;color:var(--text);font-size:15px}
   .step-actions{display:flex;align-items:center;gap:1px;opacity:0;transition:opacity var(--transition)}
   .step:hover .step-actions{opacity:1}
   .step-act{width:26px;height:26px;border:none;background:transparent;border-radius:var(--radius-xs);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
