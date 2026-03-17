@@ -56,7 +56,7 @@
   .btn.primary{background:var(--accent);border-color:transparent;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
   .btn.primary:hover{background:var(--accent-hover)}.btn.primary svg.lu{opacity:.8}
   .hdr-icon-btn{width:28px;height:28px;border:none;background:transparent;border-radius:var(--radius-xs);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
-  .hdr-icon-btn:hover{background:rgba(0,0,0,.05);color:var(--text-secondary)}
+  .hdr-icon-btn:hover{background:rgba(62,99,221,.08);color:var(--accent)}
 
   .editor-layout{display:flex;height:calc(100vh - 48px);margin-top:48px}
 
@@ -88,7 +88,8 @@
   /* Step card — no border */
   .step{position:relative;padding:20px 16px}
   .step-header{display:flex;align-items:center;gap:6px;padding:0 0 8px}
-  .step-status-icon{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .step-status-icon{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform var(--transition)}
+  .step:hover .step-status-icon{transform:scale(1.12)}
   .step-status-icon.verified{color:var(--green)}
   .step-status-icon.draft{color:var(--neutral)}
   .step-status-icon.generated{color:var(--blue)}
@@ -98,7 +99,7 @@
   .step-actions{display:flex;align-items:center;gap:1px;opacity:0;transition:opacity var(--transition)}
   .step:hover .step-actions{opacity:1}
   .step-act{width:26px;height:26px;border:none;background:transparent;border-radius:var(--radius-xs);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
-  .step-act:hover{background:rgba(0,0,0,.05);color:var(--text)}
+  .step-act:hover{background:rgba(62,99,221,.08);color:var(--accent)}
 
   /* Original text from TMS */
   .step-original{margin:0 0 4px;padding:10px 0;font-size:13px;font-weight:400;color:var(--text);line-height:1.5}
@@ -108,11 +109,14 @@
   .step-block.assert-block{border-color:rgba(22,163,74,.3)}
   .action-line{display:flex;align-items:center;gap:6px;padding:8px 10px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
   .action-line:last-child{border-bottom:none}
-  .action-icon{width:16px;height:16px;flex-shrink:0;color:var(--text-muted);display:flex;align-items:center;justify-content:center}
+  .action-icon{width:16px;height:16px;flex-shrink:0;color:var(--text-placeholder);display:flex;align-items:center;justify-content:center;transition:color var(--transition)}
+  .action-line:hover .action-icon{color:var(--text-muted)}
   .action-text{font-size:12.5px;color:var(--text)}
-  .action-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;font-size:11px;font-weight:500;border-radius:3px;white-space:nowrap}
+  .action-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;font-size:11px;font-weight:500;border-radius:3px;white-space:nowrap;transition:all var(--transition);cursor:default}
   .action-chip.variable{background:rgba(234,179,8,.06);color:var(--yellow-text);border:1px solid rgba(234,179,8,.2)}
+  .action-chip.variable:hover{background:rgba(234,179,8,.12);border-color:rgba(234,179,8,.3)}
   .action-chip.locator{background:transparent;color:var(--blue-text);border:1px solid rgba(37,99,235,.25)}
+  .action-chip.locator:hover{background:rgba(62,99,221,.04);border-color:rgba(37,99,235,.4)}
   .action-chip svg.lu{width:10px;height:10px;opacity:.6}
 
   .dropdown{display:none;position:absolute;right:8px;top:40px;background:var(--bg-white);border:1px solid var(--border-strong);border-radius:var(--radius-sm);box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px;min-width:220px;z-index:50}
@@ -357,7 +361,7 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
   <div class="preview-panel">
     <div class="url-bar"><svg class="lu"><use href="#i-lock"/></svg><span>http://158.160.161.239/auth</span></div>
     <div class="browser-frame">
-      <iframe src="http://158.160.161.239/auth" style="width:100%;height:100%;border:none;"></iframe>
+      <img src="preview-screenshot.png" alt="Preview" style="width:100%;height:100%;object-fit:cover;object-position:top;">
     </div>
   </div>
 </div>
