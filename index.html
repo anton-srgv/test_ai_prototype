@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test AI — Project Screen v9</title>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F9F9FB; --bg-white: #ffffff; --bg-hover: #f5f5f7;
+    --border: rgba(0,0,0,0.06); --border-strong: rgba(0,0,0,0.10);
+    --text: #1a1a1a; --text-secondary: #555; --text-muted: #888; --text-placeholder: #bbb;
+    --accent: #1a1a1a; --accent-hover: #333;
+    --green: #22c55e; --green-text: #15803d;
+    --blue: #3b82f6; --blue-text: #1d4ed8;
+    --red: #ef4444; --red-text: #b91c1c;
+    --orange: #f97316; --orange-text: #c2410c;
+    --yellow: #eab308; --yellow-text: #a16207;
+    --neutral: #999;
+    --mono: 'SF Mono', ui-monospace, 'Cascadia Code', monospace;
+    --sans: 'Golos Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --radius: 10px; --radius-sm: 6px; --radius-xs: 4px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.03);
+    --sidebar-w: 260px;
+    --content-px: 24px;
+    --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; height: 100vh; overflow: hidden; }
+  svg.lu { display: inline-block; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .layout { display: flex; height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { width: var(--sidebar-w); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; padding: 12px 10px 8px; }
+  .sidebar::-webkit-scrollbar { width: 0; }
+  .sidebar-brand { display: flex; align-items: center; gap: 9px; padding: 6px 8px 6px; }
+  .sidebar-brand-logo { width: 26px; height: 26px; background: linear-gradient(135deg, #1a1a1a, #444); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .sidebar-brand-name { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+  .sidebar-project-select { display: flex; align-items: center; gap: 7px; padding: 6px 8px; margin: 4px 0 4px; border-radius: var(--radius-sm); cursor: pointer; transition: background var(--transition); color: var(--text-secondary); font-size: 13px; font-weight: 500; }
+  .sidebar-project-select:hover { background: rgba(0,0,0,0.04); color: var(--text); }
+  .sidebar-project-select .sp-chevron { margin-left: auto; color: var(--text-muted); display: flex; align-items: center; }
+  .sidebar-section { margin-bottom: 2px; }
+  .sidebar-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); padding: 12px 8px 5px; }
+  .sidebar-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--radius-sm); cursor: pointer; color: var(--text-secondary); font-size: 13px; font-weight: 400; user-select: none; transition: all var(--transition); }
+  .sidebar-item:hover { background: rgba(0,0,0,0.04); color: var(--text); }
+  .sidebar-item.active { background: rgba(0,0,0,0.07); color: var(--text); font-weight: 500; }
+  .sidebar-item .s-icon { color: var(--text-muted); }
+  .sidebar-item:hover .s-icon { color: var(--text-secondary); }
+  .sidebar-item.active .s-icon { color: var(--text); }
+  .sidebar-item .count { margin-left: auto; font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .tree-item { padding-left: 8px; }
+  .tree-item.level-2 { padding-left: 24px; }
+  .tree-chevron { width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-muted); transition: transform var(--transition); }
+  .tree-chevron.open { transform: rotate(90deg); }
+  .sidebar-spacer { flex: 1; }
+  .sidebar-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 6px 4px; }
+  .sidebar-bottom { padding-top: 2px; }
+  .sidebar-bottom .sidebar-item { color: #666; font-size: 12px; }
+  .sidebar-bottom .sidebar-item:hover { color: var(--text-secondary); }
+  .sidebar-bottom .sidebar-item .s-icon { color: #777; }
+
+  /* ── MAIN ── */
+  .main { flex: 1; overflow-y: auto; padding: 14px 14px 14px 6px; }
+  .main-card { background: var(--bg-white); border-radius: 12px; box-shadow: var(--shadow-card); overflow: hidden; min-height: calc(100vh - 28px); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.04); }
+
+  .project-header { padding: 22px var(--content-px) 0; display: flex; align-items: center; justify-content: space-between; }
+  .project-title-area { display: flex; align-items: center; gap: 12px; }
+  .project-title { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); }
+  .runner-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); background: rgba(0,0,0,0.03); padding: 3px 10px; border-radius: 20px; font-variant-numeric: tabular-nums; }
+  .runner-dot { width: 6px; height: 6px; border-radius: 50%; background: #eab308; }
+  .project-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px; font-size: 13px; font-weight: 500; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--bg-white); color: var(--text-secondary); cursor: pointer; font-family: var(--sans); white-space: nowrap; transition: all var(--transition); box-shadow: var(--shadow-sm); }
+  .btn:hover { background: var(--bg-hover); color: var(--text); box-shadow: var(--shadow-md); }
+  .btn:active { transform: scale(0.98); }
+  .btn svg.lu { width: 14px; height: 14px; opacity: 0.5; }
+  .btn:hover svg.lu { opacity: 0.7; }
+  .btn .cd { font-size: 8px; opacity: 0.4; margin-left: 2px; }
+  .btn-export { margin-left: auto; }
+
+  .tabs-wrap { padding: 16px var(--content-px) 0; }
+  .tabs { display: inline-flex; background: rgba(0,0,0,0.04); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
+  .tab { padding: 6px 14px; font-size: 12.5px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-radius: var(--radius-xs); transition: all var(--transition); user-select: none; white-space: nowrap; }
+  .tab:hover { color: var(--text-secondary); }
+  .tab.active { background: var(--bg-white); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+  .tab .tc { font-size: 10px; color: var(--text-muted); margin-left: 4px; font-variant-numeric: tabular-nums; }
+  .tab.active .tc { color: var(--text-secondary); }
+
+  .toolbar { display: flex; align-items: center; gap: 8px; padding: 14px var(--content-px) 10px; }
+  .search-input { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-white); width: 240px; transition: all var(--transition); box-shadow: var(--shadow-sm); }
+  .search-input:focus-within { border-color: rgba(0,0,0,0.18); box-shadow: 0 0 0 3px rgba(59,130,246,0.08), var(--shadow-sm); }
+  .search-input .si { color: var(--text-muted); display: flex; align-items: center; }
+  .search-input input { border: none; outline: none; font-size: 13px; font-family: var(--sans); color: var(--text); width: 100%; background: transparent; }
+  .search-input input::placeholder { color: var(--text-placeholder); }
+  .filter-chip { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 12px; font-weight: 500; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--text-secondary); cursor: pointer; background: var(--bg-white); user-select: none; transition: all var(--transition); box-shadow: var(--shadow-sm); }
+  .filter-chip:hover { background: var(--bg-hover); color: var(--text); box-shadow: var(--shadow-md); }
+  .filter-chip.dashed { border-style: dashed; border-color: rgba(0,0,0,0.1); color: var(--text-muted); box-shadow: none; }
+  .filter-chip .cd { font-size: 8px; opacity: 0.35; }
+  .toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+  .toolbar-btn { width: 32px; height: 32px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--bg-white); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: all var(--transition); }
+  .toolbar-btn:hover { background: var(--bg-hover); color: var(--text-secondary); box-shadow: var(--shadow-md); }
+
+  /* ── TABLE — Linear-style: no borders, no header, airy ── */
+  .list-wrap { flex: 1; overflow-y: auto; padding: 0 var(--content-px) 24px; }
+  .list-wrap::-webkit-scrollbar { width: 6px; }
+  .list-wrap::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
+
+  .section { margin-bottom: 4px; }
+  .section-header { display: flex; align-items: center; gap: 4px; padding: 8px 10px; cursor: pointer; user-select: none; transition: background var(--transition); border-radius: var(--radius-sm); background: rgba(0,0,0,0.025); }
+  .section-header:hover { background: rgba(0,0,0,0.04); }
+  .section-header .gc { color: var(--text-muted); display: flex; align-items: center; transition: transform var(--transition); }
+  .section-header .gc.open { transform: rotate(90deg); }
+  .section-title { font-size: 12.5px; font-weight: 600; color: var(--text-secondary); }
+  .section-count { font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: 6px; }
+  .section-add { margin-left: auto; width: 24px; height: 24px; border: none; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: all var(--transition); background: transparent; }
+  .section-add:hover { background: rgba(0,0,0,0.05); color: var(--text-secondary); }
+
+  /* Rows — Linear style */
+  .row { display: flex; align-items: center; height: 40px; padding: 0 4px; border-radius: var(--radius-xs); cursor: pointer; transition: background var(--transition); gap: 0; }
+  .row:hover { background: rgba(0,0,0,0.018); }
+
+  .row .r-check { width: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .row .r-priority { width: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .row .r-status { width: 110px; flex-shrink: 0; }
+  .row .r-name { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; }
+  .row .r-badges { width: 65px; flex-shrink: 0; display: flex; justify-content: flex-end; align-items: center; gap: 4px; }
+  .row .r-steps { width: 45px; flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; color: var(--text-secondary); }
+  .row .r-date { width: 72px; flex-shrink: 0; text-align: right; font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .row .r-actions { width: 36px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+  .checkbox { width: 16px; height: 16px; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 4px; cursor: pointer; appearance: none; -webkit-appearance: none; background: var(--bg-white); vertical-align: middle; transition: all var(--transition); opacity: 0; }
+  .row:hover .checkbox { opacity: 1; }
+  .checkbox:hover { border-color: rgba(0,0,0,0.3); box-shadow: 0 0 0 2px rgba(0,0,0,0.04); }
+
+  .pri { font-size: 12px; font-weight: 600; }
+  .pri.critical { color: var(--red-text); } .pri.high { color: var(--orange-text); } .pri.medium { color: var(--text-muted); } .pri.low { color: #d4d4d4; }
+
+  .status { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status.new .status-dot { background: var(--neutral); } .status.new { color: var(--text-muted); }
+  .status.generating .status-dot { background: var(--blue); box-shadow: 0 0 0 2px rgba(59,130,246,0.15); animation: pulse 1.5s infinite; } .status.generating { color: var(--blue-text); }
+  .status.rework .status-dot { background: var(--yellow); box-shadow: 0 0 0 2px rgba(234,179,8,0.15); } .status.rework { color: var(--yellow-text); }
+  .status.ready .status-dot { background: var(--green); box-shadow: 0 0 0 2px rgba(34,197,94,0.15); } .status.ready { color: var(--green-text); }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+
+  .name-text { font-weight: 500; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.01em; }
+  .tms-tag { font-family: var(--mono); font-size: 10px; color: var(--text-muted); background: rgba(0,0,0,0.04); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+  .flaky-tag { font-size: 10px; font-weight: 600; color: var(--orange-text); background: rgba(249,115,22,0.08); padding: 2px 7px; border-radius: 4px; flex-shrink: 0; }
+
+  .row-action-btn { width: 28px; height: 28px; border: none; background: transparent; border-radius: var(--radius-xs); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: all var(--transition); }
+  .row:hover .row-action-btn { opacity: 1; }
+  .row-action-btn:hover { background: rgba(0,0,0,0.04); color: var(--text-secondary); }
+
+  [data-tip] { position: relative; cursor: help; }
+  [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 11px; font-weight: 400; padding: 5px 10px; border-radius: var(--radius-sm); white-space: nowrap; z-index: 50; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></symbol>
+  <symbol id="i-chr" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-cud" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></symbol>
+</svg>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-brand"><div class="sidebar-brand-logo">T</div><div class="sidebar-brand-name">Test AI</div></div>
+    <div class="sidebar-project-select"><svg class="lu" width="15" height="15" style="color:var(--text-muted)"><use href="#i-folder"/></svg><span>Sentinel</span><span class="sp-chevron"><svg class="lu" width="14" height="14"><use href="#i-cud"/></svg></span></div>
+    <div class="sidebar-section" style="margin-bottom:0">
+      <div class="sidebar-item"><svg class="lu s-icon" width="15" height="15"><use href="#i-settings"/></svg>Настройки проекта</div>
+      <div class="sidebar-item"><svg class="lu s-icon" width="15" height="15"><use href="#i-users"/></svg>Участники</div>
+      <div class="sidebar-item"><svg class="lu s-icon" width="15" height="15"><use href="#i-plug"/></svg>Интеграции</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Тест-кейсы</div>
+      <div class="sidebar-item active"><svg class="lu s-icon" width="16" height="16"><use href="#i-layers"/></svg>Все<span class="count">280</span></div>
+      <div class="sidebar-item tree-item"><span class="tree-chevron open"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>Общие шаги</span><span class="count">5</span></div>
+      <div class="sidebar-item tree-item"><span class="tree-chevron open"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>Регистрация</span><span class="count">7</span></div>
+      <div class="sidebar-item tree-item"><span class="tree-chevron open"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>Авторизация</span><span class="count">11</span></div>
+      <div class="sidebar-item tree-item level-2"><span class="tree-chevron"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>OAuth</span><span class="count">4</span></div>
+      <div class="sidebar-item tree-item level-2"><span class="tree-chevron"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>2FA</span><span class="count">3</span></div>
+      <div class="sidebar-item tree-item"><span class="tree-chevron"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>Биллинг</span><span class="count">24</span></div>
+      <div class="sidebar-item tree-item"><span class="tree-chevron"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>Бронирование</span><span class="count">42</span></div>
+      <div class="sidebar-item tree-item"><span class="tree-chevron"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>Настройки профиля</span><span class="count">18</span></div>
+      <div class="sidebar-item tree-item"><span class="tree-chevron"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span>Управление листингами</span><span class="count">31</span></div>
+    </div>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-bottom"><div class="sidebar-item"><svg class="lu s-icon" width="15" height="15"><use href="#i-user"/></svg>Профиль</div></div>
+  </div>
+
+  <div class="main"><div class="main-card">
+    <div class="project-header">
+      <div class="project-title-area"><div class="project-title">Тест-кейсы</div><div class="runner-badge"><span class="runner-dot"></span>Раннеры: 1 / 2</div></div>
+      <div class="project-actions">
+        <button class="btn"><svg class="lu" width="14" height="14"><use href="#i-download"/></svg>Импорт <span class="cd">▾</span></button>
+        <button class="btn"><svg class="lu" width="14" height="14"><use href="#i-plus"/></svg>Создать</button>
+        <button class="btn btn-export"><svg class="lu" width="14" height="14"><use href="#i-upload"/></svg>Экспорт</button>
+      </div>
+    </div>
+
+    <div class="tabs-wrap">
+      <div class="tabs">
+        <div class="tab active">Все<span class="tc">280</span></div>
+        <div class="tab">Новые<span class="tc">64</span></div>
+        <div class="tab">Генерация<span class="tc">12</span></div>
+        <div class="tab">Доработка<span class="tc">51</span></div>
+        <div class="tab">Готов<span class="tc">145</span></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-input"><span class="si"><svg class="lu" width="14" height="14"><use href="#i-search"/></svg></span><input type="text" placeholder="Поиск по названию или ID…"></div>
+      <div class="filter-chip">Приоритет <span class="cd">▾</span></div>
+      <div class="filter-chip">Теги <span class="cd">▾</span></div>
+      <div class="filter-chip dashed">+ Фильтр</div>
+      <div class="toolbar-right"><button class="toolbar-btn"><svg class="lu" width="15" height="15"><use href="#i-sliders"/></svg></button></div>
+    </div>
+
+    <!-- List — Linear-style, no table -->
+    <div class="list-wrap">
+
+      <!-- Общие шаги -->
+      <div class="section">
+        <div class="section-header"><span class="gc open"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span class="section-title">Общие шаги</span><span class="section-count">5</span><button class="section-add"><svg class="lu" width="13" height="13"><use href="#i-plus"/></svg></button></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri medium">—</span></div><div class="r-status"><span class="status ready"><span class="status-dot"></span>Готов</span></div><div class="r-name"><span class="name-text">Открыть сайт приложения</span></div><div class="r-badges"></div><div class="r-steps">3</div><div class="r-date" data-tip="20 августа 2025, 14:32">20.08.25</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri medium">—</span></div><div class="r-status"><span class="status ready"><span class="status-dot"></span>Готов</span></div><div class="r-name"><span class="name-text">Перейти на страницу: TMS Connections</span></div><div class="r-badges"></div><div class="r-steps">4</div><div class="r-date" data-tip="29 августа 2025, 09:15">29.08.25</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+      </div>
+
+      <!-- Регистрация -->
+      <div class="section">
+        <div class="section-header"><span class="gc open"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span class="section-title">Регистрация</span><span class="section-count">7</span><button class="section-add"><svg class="lu" width="13" height="13"><use href="#i-plus"/></svg></button></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri medium">—</span></div><div class="r-status"><span class="status ready"><span class="status-dot"></span>Готов</span></div><div class="r-name"><span class="name-text">Регистрация пользователя</span></div><div class="r-badges"></div><div class="r-steps">5</div><div class="r-date" data-tip="14 марта 2026, 11:20">14.03.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri high">↑</span></div><div class="r-status"><span class="status rework"><span class="status-dot"></span>Доработка</span></div><div class="r-name"><span class="name-text">Успешная регистрация нового пользователя</span></div><div class="r-badges"><span class="flaky-tag">flaky</span></div><div class="r-steps">8</div><div class="r-date" data-tip="11 марта 2026, 16:45">11.03.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri medium">—</span></div><div class="r-status"><span class="status new"><span class="status-dot"></span>Новый</span></div><div class="r-name"><span class="name-text">Успешный инвайт ранее зарегистрированного пользователя</span></div><div class="r-badges"><span class="tms-tag">@TestIT</span></div><div class="r-steps">—</div><div class="r-date" data-tip="18 февраля 2026, 10:00">18.02.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri low">↓</span></div><div class="r-status"><span class="status new"><span class="status-dot"></span>Новый</span></div><div class="r-name"><span class="name-text">Неуспешное приглашение пользователя в организацию</span></div><div class="r-badges"><span class="tms-tag">@TestIT</span></div><div class="r-steps">—</div><div class="r-date" data-tip="25 декабря 2025, 13:10">25.12.25</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+      </div>
+
+      <!-- Авторизация -->
+      <div class="section">
+        <div class="section-header"><span class="gc open"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span class="section-title">Авторизация</span><span class="section-count">11</span><button class="section-add"><svg class="lu" width="13" height="13"><use href="#i-plus"/></svg></button></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri critical">↑↑</span></div><div class="r-status"><span class="status ready"><span class="status-dot"></span>Готов</span></div><div class="r-name"><span class="name-text">Успешная авторизация неподтверждённого пользователя</span></div><div class="r-badges"></div><div class="r-steps">6</div><div class="r-date" data-tip="13 марта 2026, 09:30">13.03.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri high">↑</span></div><div class="r-status"><span class="status rework"><span class="status-dot"></span>Доработка</span></div><div class="r-name"><span class="name-text">Авторизация через Google OAuth</span></div><div class="r-badges"></div><div class="r-steps">12</div><div class="r-date" data-tip="15 марта 2026, 18:20">15.03.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri medium">—</span></div><div class="r-status"><span class="status generating"><span class="status-dot"></span>Генерация</span></div><div class="r-name"><span class="name-text">Авторизация через Apple ID</span></div><div class="r-badges"></div><div class="r-steps">—</div><div class="r-date" data-tip="16 марта 2026, 10:05">16.03.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri medium">—</span></div><div class="r-status"><span class="status ready"><span class="status-dot"></span>Готов</span></div><div class="r-name"><span class="name-text">Восстановление пароля по email</span></div><div class="r-badges"></div><div class="r-steps">7</div><div class="r-date" data-tip="12 марта 2026, 08:00">12.03.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+        <div class="row"><div class="r-check"><input type="checkbox" class="checkbox"></div><div class="r-priority"><span class="pri critical">↑↑</span></div><div class="r-status"><span class="status ready"><span class="status-dot"></span>Готов</span></div><div class="r-name"><span class="name-text">Блокировка аккаунта после 5 неудачных попыток</span></div><div class="r-badges"><span class="flaky-tag">flaky</span></div><div class="r-steps">9</div><div class="r-date" data-tip="10 марта 2026, 14:50">10.03.26</div><div class="r-actions"><button class="row-action-btn"><svg class="lu" width="15" height="15"><use href="#i-dots"/></svg></button></div></div>
+      </div>
+
+      <!-- Collapsed sections -->
+      <div class="section">
+        <div class="section-header"><span class="gc"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span class="section-title">Биллинг</span><span class="section-count">24</span><button class="section-add"><svg class="lu" width="13" height="13"><use href="#i-plus"/></svg></button></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="gc"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span class="section-title">Бронирование</span><span class="section-count">42</span><button class="section-add"><svg class="lu" width="13" height="13"><use href="#i-plus"/></svg></button></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="gc"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span class="section-title">Настройки профиля</span><span class="section-count">18</span><button class="section-add"><svg class="lu" width="13" height="13"><use href="#i-plus"/></svg></button></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="gc"><svg class="lu" width="14" height="14"><use href="#i-chr"/></svg></span><span class="section-title">Управление листингами</span><span class="section-count">31</span><button class="section-add"><svg class="lu" width="13" height="13"><use href="#i-plus"/></svg></button></div>
+      </div>
+
+    </div>
+  </div></div>
+</div>
+<!-- Context Menu -->
+<div id="ctx-menu" style="display:none; position:fixed; z-index:200; background:var(--bg-white); border:1px solid var(--border-strong); border-radius:var(--radius-sm); box-shadow:0 4px 16px rgba(0,0,0,0.12); padding:4px; min-width:200px;">
+  <div class="ctx-item" data-action="open"><svg class="lu" width="14" height="14"><use href="#i-ext"/></svg>Открыть в редакторе</div>
+  <div class="ctx-item" data-action="info"><svg class="lu" width="14" height="14"><use href="#i-eye"/></svg>Посмотреть инфо</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" data-action="playback"><svg class="lu" width="14" height="14"><use href="#i-play"/></svg>Воспроизвести</div>
+  <div class="ctx-item" data-action="generate"><svg class="lu" width="14" height="14"><use href="#i-zap"/></svg>Запустить генерацию</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item ctx-danger" data-action="delete"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить</div>
+</div>
+
+<!-- Right Drawer (info panel) -->
+<div id="drawer-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:300; transition:opacity 0.2s;" onclick="closeDrawer()"></div>
+<div id="drawer" style="display:none; position:fixed; top:0; right:0; bottom:0; width:380px; background:var(--bg-white); z-index:310; box-shadow:-4px 0 24px rgba(0,0,0,0.08); transform:translateX(100%); transition:transform 0.25s cubic-bezier(0.4,0,0.2,1); overflow-y:auto;">
+  <div style="padding:20px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between;">
+    <div>
+      <div id="drawer-title" style="font-size:15px; font-weight:600; color:var(--text); line-height:1.4; margin-bottom:8px;">Название тест-кейса</div>
+      <div id="drawer-status" style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500;"></div>
+    </div>
+    <button onclick="closeDrawer()" style="width:28px; height:28px; border:none; background:transparent; border-radius:var(--radius-xs); color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center;"><svg class="lu" width="16" height="16"><use href="#i-x"/></svg></button>
+  </div>
+  <div style="padding:16px 24px; display:flex; flex-direction:column; gap:10px; border-bottom:1px solid var(--border);">
+    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Приоритет</span><span id="drawer-pri" style="color:var(--text-secondary); font-weight:500;"></span></div>
+    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Секция</span><span id="drawer-section" style="color:var(--text-secondary); font-weight:500;"></span></div>
+    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Шаги</span><span id="drawer-steps" style="color:var(--text-secondary); font-weight:500;"></span></div>
+    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Обновлён</span><span id="drawer-date" style="color:var(--text-secondary); font-weight:500;"></span></div>
+  </div>
+  <div style="padding:20px 24px;">
+    <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:14px;">Шаги из TMS</div>
+    <div id="drawer-steps-list" style="display:flex; flex-direction:column; gap:0;"></div>
+  </div>
+  <div style="padding:16px 24px; border-top:1px solid var(--border);">
+    <button class="btn" onclick="navigateToEditor()" style="width:100%; justify-content:center;"><svg class="lu" width="14" height="14"><use href="#i-ext"/></svg>Открыть в редакторе</button>
+  </div>
+</div>
+
+<!-- Editor Page (hidden by default) -->
+<div id="editor-page" style="display:none; position:fixed; inset:0; background:var(--bg); z-index:100;">
+  <div class="layout" style="height:100vh;">
+    <div class="sidebar">
+      <div class="sidebar-brand"><div class="sidebar-brand-logo">T</div><div class="sidebar-brand-name">Test AI</div></div>
+      <div class="sidebar-project-select"><svg class="lu" width="15" height="15" style="color:var(--text-muted)"><use href="#i-folder"/></svg><span>Sentinel</span><span class="sp-chevron"><svg class="lu" width="14" height="14"><use href="#i-cud"/></svg></span></div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-item" onclick="navigateToList()" style="cursor:pointer;"><svg class="lu s-icon" width="15" height="15"><use href="#i-arrow-left"/></svg>Назад к списку</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="main-card" style="padding:32px 40px;">
+        <!-- Breadcrumb -->
+        <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); margin-bottom:20px;">
+          <span style="cursor:pointer;" onclick="navigateToList()">Тест-кейсы</span>
+          <span>›</span>
+          <span id="editor-section" style="cursor:pointer;" onclick="navigateToList()">Секция</span>
+          <span>›</span>
+          <span id="editor-breadcrumb" style="color:var(--text-secondary);">Название</span>
+        </div>
+        <!-- Title -->
+        <div id="editor-title" style="font-size:22px; font-weight:700; letter-spacing:-0.03em; color:var(--text); margin-bottom:8px;"></div>
+        <div id="editor-status-line" style="display:flex; align-items:center; gap:12px; margin-bottom:32px;"></div>
+        <!-- Placeholder content -->
+        <div style="border:2px dashed var(--border); border-radius:var(--radius); padding:48px; text-align:center; color:var(--text-muted);">
+          <div style="font-size:15px; font-weight:500; margin-bottom:8px;">Редактор тест-кейса</div>
+          <div style="font-size:13px;">Здесь будет редактор шагов, браузер и панель свойств</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Extra icon symbols -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="m10 14 11-11"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+</svg>
+
+<style>
+  /* Context menu */
+  .ctx-item { display:flex; align-items:center; gap:8px; padding:7px 12px; font-size:13px; color:var(--text-secondary); cursor:pointer; border-radius:var(--radius-xs); transition:background 0.1s; }
+  .ctx-item:hover { background:rgba(0,0,0,0.04); color:var(--text); }
+  .ctx-item.ctx-danger { color:var(--red-text); }
+  .ctx-item.ctx-danger:hover { background:rgba(239,68,68,0.06); }
+  .ctx-sep { height:1px; background:var(--border); margin:4px 8px; }
+
+  /* Drawer animation */
+  #drawer.open { transform:translateX(0); }
+</style>
+
+<script>
+  // ── DATA ──
+  const sampleSteps = [
+    'Открыть страницу настроек команды',
+    'Нажать кнопку «Пригласить участника»',
+    'Ввести email пользователя в поле Email',
+    'Нажать «Отправить приглашение»',
+    'Проверить появление сообщения «Приглашение отправлено»',
+    'Проверить что пользователь появился в списке'
+  ];
+
+  let currentRow = null;
+  const ctxMenu = document.getElementById('ctx-menu');
+
+  // ── CONTEXT MENU ──
+  document.querySelectorAll('.row-action-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentRow = btn.closest('.row');
+      const rect = btn.getBoundingClientRect();
+      ctxMenu.style.display = 'block';
+      ctxMenu.style.top = rect.bottom + 4 + 'px';
+      ctxMenu.style.left = Math.min(rect.left, window.innerWidth - 220) + 'px';
+    });
+  });
+
+  document.addEventListener('click', () => { ctxMenu.style.display = 'none'; });
+
+  ctxMenu.querySelectorAll('.ctx-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const action = item.dataset.action;
+      ctxMenu.style.display = 'none';
+      if (!currentRow) return;
+      if (action === 'open') navigateToEditor();
+      if (action === 'info') openDrawer();
+    });
+  });
+
+  // ── ROW CLICK → EDITOR ──
+  document.querySelectorAll('.row').forEach(row => {
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('.r-check') || e.target.closest('.row-action-btn')) return;
+      currentRow = row;
+      navigateToEditor();
+    });
+  });
+
+  // ── DRAWER ──
+  function getRowData() {
+    if (!currentRow) return {};
+    const name = currentRow.querySelector('.name-text')?.textContent || '';
+    const status = currentRow.querySelector('.status')?.outerHTML || '';
+    const pri = currentRow.querySelector('.pri')?.textContent || '';
+    const steps = currentRow.querySelector('.r-steps')?.textContent || '';
+    const date = currentRow.querySelector('.r-date')?.getAttribute('data-tip') || '';
+    const section = currentRow.closest('.section')?.querySelector('.section-title')?.textContent || '';
+    return { name, status, pri, steps, date, section };
+  }
+
+  function openDrawer() {
+    const data = getRowData();
+    document.getElementById('drawer-title').textContent = data.name;
+    document.getElementById('drawer-status').innerHTML = data.status;
+    document.getElementById('drawer-pri').textContent = data.pri === '↑↑' ? 'Критический' : data.pri === '↑' ? 'Высокий' : data.pri === '↓' ? 'Низкий' : 'Средний';
+    document.getElementById('drawer-section').textContent = data.section;
+    document.getElementById('drawer-steps').textContent = data.steps;
+    document.getElementById('drawer-date').textContent = data.date;
+
+    const list = document.getElementById('drawer-steps-list');
+    list.innerHTML = sampleSteps.map((s, i) =>
+      `<div style="display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(0,0,0,0.03);">
+        <span style="font-family:var(--mono); font-size:11px; color:var(--text-muted); width:20px; text-align:right; flex-shrink:0; padding-top:1px;">${i + 1}</span>
+        <span style="font-size:12.5px; color:var(--text); line-height:1.5;">${s}</span>
+      </div>`
+    ).join('');
+
+    document.getElementById('drawer-overlay').style.display = 'block';
+    document.getElementById('drawer').style.display = 'block';
+    requestAnimationFrame(() => {
+      document.getElementById('drawer-overlay').style.opacity = '1';
+      document.getElementById('drawer').classList.add('open');
+    });
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('drawer').style.display = 'none';
+      document.getElementById('drawer-overlay').style.display = 'none';
+    }, 250);
+  }
+
+  // ── NAVIGATION ──
+  function navigateToEditor() {
+    closeDrawer();
+    const data = getRowData();
+    document.getElementById('editor-title').textContent = data.name || 'Тест-кейс';
+    document.getElementById('editor-breadcrumb').textContent = data.name || '';
+    document.getElementById('editor-section').textContent = data.section || 'Секция';
+    document.getElementById('editor-status-line').innerHTML = data.status + '<span style="font-size:12px; color:var(--text-muted);">' + data.date + '</span>';
+    document.getElementById('editor-page').style.display = 'block';
+  }
+
+  function navigateToList() {
+    document.getElementById('editor-page').style.display = 'none';
+  }
+</script>
+</body>
+</html>
