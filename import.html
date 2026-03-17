@@ -250,7 +250,7 @@ function showC(){
   document.getElementById('d2').classList.add('on');
 }
 function hideC(){document.getElementById('ov').classList.remove('show');document.getElementById('d2').classList.remove('on')}
-function doImport(){hideC();alert('Импорт запущен! '+sel.size+' тест-кейсов будут импортированы в проект Sentinel.')}
+function doImport(){location.href='index.html?imported='+sel.size}
 document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')hideC()});
 
 rTree();uF();
