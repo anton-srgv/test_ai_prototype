@@ -11,7 +11,7 @@
     --bg:#F9F9FB;--bg-white:#fff;--bg-hover:#f5f5f7;
     --border:rgba(0,0,0,.10);--border-strong:rgba(0,0,0,.20);
     --text:#111;--text-secondary:#444;--text-muted:#71717a;--text-placeholder:#a1a1aa;
-    --accent:#18181b;--accent-hover:#27272a;
+    --accent:#3E63DD;--accent-hover:#3358C4;
     --green:#16a34a;--green-text:#15803d;
     --blue:#2563eb;--blue-text:#1d4ed8;
     --yellow:#ca8a04;--yellow-text:#854d0e;
@@ -38,14 +38,16 @@
   /* Panel header tooltips — also below */
   .panel-header [data-tip]:hover::after{top:calc(100% + 6px)}
 
-  .topbar{height:44px;display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid var(--border);background:var(--bg-white);position:fixed;top:0;left:0;right:0;z-index:10}
-  .topbar-back{width:30px;height:30px;border:none;background:transparent;border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+  .topbar{height:48px;display:flex;align-items:center;padding:0 16px;gap:12px;border-bottom:1px solid var(--border);background:var(--bg-white);position:fixed;top:0;left:0;right:0;z-index:10}
+  .topbar-back{width:32px;height:32px;border:none;background:transparent;border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
   .topbar-back:hover{background:var(--bg-hover);color:var(--text)}
-  .bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}
-  .bc a{color:var(--text-muted);text-decoration:none}.bc a:hover{color:var(--text-secondary)}
-  .bc .sep{font-size:10px}.bc .cur{color:var(--text-secondary);font-weight:500}
-  .topbar-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;margin-left:8px}
-  .topbar-status .sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .topbar-title{font-size:14px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+  .topbar-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+  .topbar-badge.rework{background:rgba(202,138,4,.1);color:var(--yellow-text)}
+  .topbar-badge.ready{background:rgba(22,163,74,.1);color:var(--green-text)}
+  .topbar-badge.draft{background:rgba(0,0,0,.05);color:var(--text-muted)}
+  .topbar-badge .bd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .topbar-progress{font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums}
   .topbar-right{margin-left:auto;display:flex;align-items:center;gap:6px}
   .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;font-size:12px;font-weight:500;border-radius:var(--radius-sm);border:1px solid var(--border-strong);background:var(--bg-white);color:var(--text-secondary);cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all var(--transition);box-shadow:var(--shadow-sm)}
   .btn:hover{background:var(--bg-hover);color:var(--text);box-shadow:var(--shadow-md)}
@@ -56,13 +58,13 @@
   .hdr-icon-btn{width:28px;height:28px;border:none;background:transparent;border-radius:var(--radius-xs);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
   .hdr-icon-btn:hover{background:rgba(0,0,0,.05);color:var(--text-secondary)}
 
-  .editor-layout{display:flex;height:calc(100vh - 44px);margin-top:44px}
+  .editor-layout{display:flex;height:calc(100vh - 48px);margin-top:48px}
 
   .iconbar{width:var(--iconbar-w);background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:2px;flex-shrink:0}
   .iconbar-btn{width:34px;height:34px;border:none;background:transparent;border-radius:var(--radius-sm);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition);position:relative}
   .iconbar-btn:hover{background:rgba(0,0,0,.04);color:var(--text-secondary)}
-  .iconbar-btn.active{color:var(--text);background:rgba(0,0,0,.06)}
-  .iconbar-btn.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:var(--text);border-radius:0 2px 2px 0}
+  .iconbar-btn.active{color:var(--accent);background:rgba(62,99,221,.06)}
+  .iconbar-btn.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:var(--accent);border-radius:0 2px 2px 0}
 
   .left-panel{width:500px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
   .panel-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;height:46px}
@@ -174,8 +176,9 @@
 
 <div class="topbar">
   <button class="topbar-back" onclick="window.location.href='index.html'" data-tip="Назад к списку"><svg class="lu" width="16" height="16"><use href="#i-arrow-left"/></svg></button>
-  <div class="bc"><a href="index.html">Тест-кейсы</a><span class="sep">›</span><a href="index.html">Авторизация</a><span class="sep">›</span><span class="cur">Авторизация через Google OAuth</span></div>
-  <div class="topbar-status" style="color:var(--yellow-text)"><span class="sd" style="background:var(--yellow)"></span>Доработка</div>
+  <span class="topbar-title">Авторизация через Google OAuth</span>
+  <span class="topbar-badge rework"><span class="bd" style="background:var(--yellow)"></span>Доработка</span>
+  <span class="topbar-progress">3/3 шагов</span>
   <div class="topbar-right"><button class="btn">Экспорт</button></div>
 </div>
 
@@ -352,12 +355,9 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
   </div>
 
   <div class="preview-panel">
-    <div class="url-bar"><svg class="lu"><use href="#i-lock"/></svg><span>http://158.160.161.239/</span></div>
+    <div class="url-bar"><svg class="lu"><use href="#i-lock"/></svg><span>http://158.160.161.239/auth</span></div>
     <div class="browser-frame">
-      <div class="browser-placeholder">
-        <svg class="lu" width="48" height="48"><use href="#i-globe"/></svg>
-        <div>Нажмите «Воспроизвести» чтобы загрузить превью</div>
-      </div>
+      <iframe src="http://158.160.161.239/auth" style="width:100%;height:100%;border:none;"></iframe>
     </div>
   </div>
 </div>
