@@ -9,20 +9,20 @@
 <style>
   :root {
     --bg:#F9F9FB;--bg-white:#fff;--bg-hover:#f5f5f7;
-    --border:rgba(0,0,0,.08);--border-strong:rgba(0,0,0,.16);
-    --text:#1a1a1a;--text-secondary:#555;--text-muted:#888;--text-placeholder:#bbb;
-    --accent:#1a1a1a;--accent-hover:#333;
-    --green:#22c55e;--green-text:#15803d;
-    --blue:#3b82f6;--blue-text:#1d4ed8;
-    --yellow:#eab308;--yellow-text:#a16207;
-    --red:#ef4444;--red-text:#b91c1c;
-    --neutral:#999;
+    --border:rgba(0,0,0,.10);--border-strong:rgba(0,0,0,.20);
+    --text:#111;--text-secondary:#444;--text-muted:#71717a;--text-placeholder:#a1a1aa;
+    --accent:#18181b;--accent-hover:#27272a;
+    --green:#16a34a;--green-text:#15803d;
+    --blue:#2563eb;--blue-text:#1d4ed8;
+    --yellow:#ca8a04;--yellow-text:#854d0e;
+    --red:#dc2626;--red-text:#b91c1c;
+    --neutral:#71717a;
     --mono:'SF Mono',ui-monospace,'Cascadia Code',monospace;
     --sans:'Golos Text',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
     --radius:10px;--radius-sm:6px;--radius-xs:4px;
-    --shadow-sm:0 1px 2px rgba(0,0,0,.04);
-    --shadow-md:0 2px 8px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.03);
-    --shadow-card:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.03);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+    --shadow-md:0 2px 8px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+    --shadow-card:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
     --transition:.15s cubic-bezier(.4,0,.2,1);
     --iconbar-w:44px
   }
@@ -30,11 +30,13 @@
   body{font-family:var(--sans);background:var(--bg-white);color:var(--text);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;height:100vh;overflow:hidden}
   svg.lu{display:inline-block;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-  /* Tooltip — always on top */
+  /* Tooltip — default: show BELOW to avoid clipping under sticky headers */
   [data-tip]{position:relative}
-  [data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:11px;font-weight:400;padding:4px 9px;border-radius:var(--radius-xs);white-space:nowrap;z-index:9999;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+  [data-tip]:hover::after{content:attr(data-tip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:11px;font-weight:400;padding:4px 9px;border-radius:var(--radius-xs);white-space:nowrap;z-index:9999;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.15)}
   /* Sidebar tooltips — show to the right */
-  .iconbar [data-tip]:hover::after{bottom:auto;left:calc(100% + 8px);top:50%;transform:translateY(-50%)}
+  .iconbar [data-tip]:hover::after{top:50%;left:calc(100% + 8px);transform:translateY(-50%)}
+  /* Panel header tooltips — also below */
+  .panel-header [data-tip]:hover::after{top:calc(100% + 6px)}
 
   .topbar{height:44px;display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid var(--border);background:var(--bg-white);position:fixed;top:0;left:0;right:0;z-index:10}
   .topbar-back{width:30px;height:30px;border:none;background:transparent;border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
@@ -76,7 +78,6 @@
 
   .step-divider{display:flex;align-items:center;justify-content:center;height:20px;position:relative}
   .step-divider::before{content:'';position:absolute;left:20px;right:20px;top:50%;height:1px;background:var(--border-strong)}
-  .step-divider.first::before{display:none}
   .step-divider-btn{width:20px;height:20px;border:1px solid var(--border-strong);border-radius:50%;background:var(--bg-white);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;opacity:0;transition:all var(--transition)}
   .step-divider:hover .step-divider-btn{opacity:1}
   .step-divider-btn:hover{border-color:var(--text-muted);color:var(--text-secondary);box-shadow:var(--shadow-sm)}
@@ -95,11 +96,8 @@
   .step-act{width:26px;height:26px;border:none;background:transparent;border-radius:var(--radius-xs);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
   .step-act:hover{background:rgba(0,0,0,.05);color:var(--text)}
 
-  /* Task description — always visible, muted */
-  .step-task{margin:0 8px 8px;padding:8px 10px;font-size:12px;color:var(--text-muted);line-height:1.6;background:rgba(0,0,0,.02);border-radius:var(--radius-xs);border-left:2px solid rgba(0,0,0,.06);cursor:text;transition:background var(--transition);white-space:pre-wrap}
-  .step-task:hover{background:rgba(0,0,0,.035)}
-  .step-task-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-placeholder);margin-bottom:4px;display:flex;align-items:center;gap:4px}
-  .step-task-label svg.lu{width:10px;height:10px;opacity:.5}
+  /* Original text from TMS — Retool style: bold text above block */
+  .step-original{margin:0 8px 4px;padding:0 2px;font-size:13px;font-weight:500;color:var(--text);line-height:1.5}
 
   .step-block{margin:0 8px 8px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden}
   .step-block.assert-block{border-color:rgba(34,197,94,.3)}
@@ -194,7 +192,7 @@
       <div class="tab-pane active" id="pane-editor">
         <div class="steps-list">
 
-          <div class="step-divider first" style="height:12px"></div>
+          <div class="step-divider" style="height:12px"><button class="step-divider-btn" data-tip="Добавить шаг"><svg class="lu" width="10" height="10"><use href="#i-plus"/></svg></button></div>
 
           <!-- Step 1 -->
           <div class="step">
@@ -215,15 +213,13 @@
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
               </div>
             </div>
-            <div class="step-task">
-              <div class="step-task-label"><svg class="lu"><use href="#i-pencil"/></svg>Задание</div>
-              Действие: Ввести логин и пароль, нажать кнопку Login
-Ожидаемый результат: Пользователь авторизован, открыта главная страница</div>
+            <div class="step-original">Ввести логин и пароль, нажать кнопку Login</div>
             <div class="step-block">
               <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>login</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле username</span></div>
               <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>pass</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле password</span></div>
               <div class="action-line"><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Login</span></div>
             </div>
+            <div class="step-original">Пользователь авторизован, открыта главная страница</div>
             <div class="step-block assert-block">
               <div class="action-line"><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>главная страница</span><span class="action-text">отображается</span></div>
             </div>
@@ -250,13 +246,11 @@
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
               </div>
             </div>
-            <div class="step-task">
-              <div class="step-task-label"><svg class="lu"><use href="#i-pencil"/></svg>Задание</div>
-              Действие: Ввести новое имя в поле name
-Ожидаемый результат: Кнопка Save активна, нажать Save</div>
+            <div class="step-original">Ввести новое имя в поле name</div>
             <div class="step-block">
               <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>new-name</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле name</span></div>
             </div>
+            <div class="step-original">Кнопка Save активна, нажать Save</div>
             <div class="step-block assert-block">
               <div class="action-line"><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Save</span></div>
             </div>
@@ -283,10 +277,7 @@
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
               </div>
             </div>
-            <div class="step-task">
-              <div class="step-task-label"><svg class="lu"><use href="#i-pencil"/></svg>Задание</div>
-              Действие: Проверить уведомление
-Ожидаемый результат: Отображается уведомление «Сохранено»</div>
+            <div class="step-original">Отображается уведомление «Сохранено»</div>
             <div class="step-block assert-block">
               <div class="action-line"><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>уведомление «Сохранено»</span><span class="action-text">отображается</span></div>
             </div>
