@@ -62,8 +62,8 @@
   .sidebar-bottom .sidebar-item .s-icon { color: #777; }
 
   /* ── MAIN ── */
-  .main { flex: 1; overflow-y: auto; padding: 14px 14px 14px 6px; }
-  .main-card { background: var(--bg-white); border-radius: 12px; box-shadow: var(--shadow-card); overflow: hidden; min-height: calc(100vh - 28px); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.04); }
+  .main { flex: 1; overflow: hidden; padding: 14px 14px 14px 6px; }
+  .main-card { background: var(--bg-white); border-radius: 12px; box-shadow: var(--shadow-card); height: calc(100vh - 28px); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.04); overflow: hidden; }
 
   .project-header { padding: 22px var(--content-px) 0; display: flex; align-items: center; justify-content: space-between; }
   .project-title-area { display: flex; align-items: center; gap: 12px; }
@@ -107,7 +107,7 @@
   .list-wrap::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
 
   .section { margin-bottom: 4px; }
-  .section-header { display: flex; align-items: center; gap: 4px; padding: 8px 10px; cursor: pointer; user-select: none; transition: background var(--transition); border-radius: var(--radius-sm); background: rgba(0,0,0,0.025); }
+  .section-header { display: flex; align-items: center; gap: 4px; padding: 8px 10px; cursor: pointer; user-select: none; transition: background var(--transition); border-radius: var(--radius-sm); background: rgba(0,0,0,0.025); position: sticky; top: 0; z-index: 3; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   .section-header:hover { background: rgba(0,0,0,0.04); }
   .section-header .gc { color: var(--text-muted); display: flex; align-items: center; transition: transform var(--transition); }
   .section-header .gc.open { transform: rotate(90deg); }
@@ -287,27 +287,25 @@
 </div>
 
 <!-- Right Drawer (info panel) -->
-<div id="drawer-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:300; transition:opacity 0.2s;" onclick="closeDrawer()"></div>
-<div id="drawer" style="display:none; position:fixed; top:0; right:0; bottom:0; width:380px; background:var(--bg-white); z-index:310; box-shadow:-4px 0 24px rgba(0,0,0,0.08); transform:translateX(100%); transition:transform 0.25s cubic-bezier(0.4,0,0.2,1); overflow-y:auto;">
-  <div style="padding:20px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between;">
-    <div>
-      <div id="drawer-title" style="font-size:15px; font-weight:600; color:var(--text); line-height:1.4; margin-bottom:8px;">Название тест-кейса</div>
-      <div id="drawer-status" style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500;"></div>
-    </div>
-    <button onclick="closeDrawer()" style="width:28px; height:28px; border:none; background:transparent; border-radius:var(--radius-xs); color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center;"><svg class="lu" width="16" height="16"><use href="#i-x"/></svg></button>
+<div id="drawer-overlay" onclick="closeDrawer()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.25); z-index:300;"></div>
+<div id="drawer" style="position:fixed; top:0; right:-400px; bottom:0; width:400px; background:var(--bg-white); z-index:310; box-shadow:-8px 0 30px rgba(0,0,0,0.1); transition:right 0.3s cubic-bezier(0.4,0,0.2,1); overflow-y:auto; border-left:1px solid var(--border);">
+  <div style="padding:24px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:16px;">
+    <div id="drawer-title" style="font-size:16px; font-weight:600; color:var(--text); line-height:1.4;">Название тест-кейса</div>
+    <button onclick="closeDrawer()" style="width:28px; height:28px; border:none; background:transparent; border-radius:var(--radius-xs); color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition: background 0.1s;" onmouseover="this.style.background='rgba(0,0,0,0.04)'" onmouseout="this.style.background='transparent'"><svg class="lu" width="16" height="16"><use href="#i-x"/></svg></button>
   </div>
-  <div style="padding:16px 24px; display:flex; flex-direction:column; gap:10px; border-bottom:1px solid var(--border);">
-    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Приоритет</span><span id="drawer-pri" style="color:var(--text-secondary); font-weight:500;"></span></div>
-    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Секция</span><span id="drawer-section" style="color:var(--text-secondary); font-weight:500;"></span></div>
-    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Шаги</span><span id="drawer-steps" style="color:var(--text-secondary); font-weight:500;"></span></div>
-    <div style="display:flex; font-size:12px;"><span style="color:var(--text-muted); width:80px; flex-shrink:0;">Обновлён</span><span id="drawer-date" style="color:var(--text-secondary); font-weight:500;"></span></div>
+  <div style="padding:20px 24px; display:flex; flex-direction:column; gap:12px; border-bottom:1px solid var(--border);">
+    <div style="display:flex; font-size:13px;"><span style="color:var(--text-muted); width:90px; flex-shrink:0;">Статус</span><span id="drawer-status" style="font-weight:500;"></span></div>
+    <div style="display:flex; font-size:13px;"><span style="color:var(--text-muted); width:90px; flex-shrink:0;">Приоритет</span><span id="drawer-pri" style="color:var(--text); font-weight:500;"></span></div>
+    <div style="display:flex; font-size:13px;"><span style="color:var(--text-muted); width:90px; flex-shrink:0;">Секция</span><span id="drawer-section" style="color:var(--text); font-weight:500;"></span></div>
+    <div style="display:flex; font-size:13px;"><span style="color:var(--text-muted); width:90px; flex-shrink:0;">Источник</span><span id="drawer-source" style="color:var(--text-secondary); font-family:var(--mono); font-size:12px;"></span></div>
+    <div style="display:flex; font-size:13px;"><span style="color:var(--text-muted); width:90px; flex-shrink:0;">Обновлён</span><span id="drawer-date" style="color:var(--text); font-weight:500;"></span></div>
   </div>
-  <div style="padding:20px 24px;">
-    <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:14px;">Шаги из TMS</div>
-    <div id="drawer-steps-list" style="display:flex; flex-direction:column; gap:0;"></div>
+  <div style="padding:24px;">
+    <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:16px;">Шаги из TMS (ещё не сгенерирован)</div>
+    <div id="drawer-steps-list"></div>
   </div>
-  <div style="padding:16px 24px; border-top:1px solid var(--border);">
-    <button class="btn" onclick="navigateToEditor()" style="width:100%; justify-content:center;"><svg class="lu" width="14" height="14"><use href="#i-ext"/></svg>Открыть в редакторе</button>
+  <div style="padding:16px 24px 24px; border-top:1px solid var(--border); position:sticky; bottom:0; background:var(--bg-white);">
+    <button class="btn" onclick="window.location.href='editor.html'" style="width:100%; justify-content:center; background:var(--accent); color:white; border-color:transparent;"><svg class="lu" width="14" height="14"><use href="#i-ext"/></svg>Открыть в редакторе</button>
   </div>
 </div>
 
@@ -388,46 +386,43 @@
   function getRowData() {
     if (!currentRow) return {};
     const name = currentRow.querySelector('.name-text')?.textContent || '';
-    const status = currentRow.querySelector('.status')?.outerHTML || '';
+    const statusEl = currentRow.querySelector('.status');
+    const statusText = statusEl?.textContent?.trim() || '';
+    const statusClass = statusEl?.className?.replace('status','')?.trim() || '';
     const pri = currentRow.querySelector('.pri')?.textContent || '';
     const steps = currentRow.querySelector('.r-steps')?.textContent || '';
     const date = currentRow.querySelector('.r-date')?.getAttribute('data-tip') || '';
     const section = currentRow.closest('.section')?.querySelector('.section-title')?.textContent || '';
-    return { name, status, pri, steps, date, section };
+    const tms = currentRow.querySelector('.tms-tag')?.textContent || '';
+    return { name, statusText, statusClass, pri, steps, date, section, tms };
   }
 
   function openDrawer() {
     const data = getRowData();
     document.getElementById('drawer-title').textContent = data.name;
-    document.getElementById('drawer-status').innerHTML = data.status;
+    const statusColors = { new:'var(--neutral)', generating:'var(--blue)', rework:'var(--yellow)', ready:'var(--green)' };
+    const dotColor = statusColors[data.statusClass] || 'var(--neutral)';
+    document.getElementById('drawer-status').innerHTML = '<span style="width:7px;height:7px;border-radius:50%;background:'+dotColor+';display:inline-block;"></span> <span style="font-weight:500;color:var(--text);">'+data.statusText+'</span>';
     document.getElementById('drawer-pri').textContent = data.pri === '↑↑' ? 'Критический' : data.pri === '↑' ? 'Высокий' : data.pri === '↓' ? 'Низкий' : 'Средний';
     document.getElementById('drawer-section').textContent = data.section;
-    document.getElementById('drawer-steps').textContent = data.steps;
+    document.getElementById('drawer-source').textContent = data.tms || '—';
     document.getElementById('drawer-date').textContent = data.date;
 
     const list = document.getElementById('drawer-steps-list');
     list.innerHTML = sampleSteps.map((s, i) =>
-      `<div style="display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(0,0,0,0.03);">
-        <span style="font-family:var(--mono); font-size:11px; color:var(--text-muted); width:20px; text-align:right; flex-shrink:0; padding-top:1px;">${i + 1}</span>
-        <span style="font-size:12.5px; color:var(--text); line-height:1.5;">${s}</span>
-      </div>`
+      '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.04);">' +
+        '<span style="font-family:var(--mono); font-size:12px; color:var(--text-muted); width:22px; text-align:right; flex-shrink:0; padding-top:1px;">' + (i+1) + '</span>' +
+        '<span style="font-size:13px; color:var(--text); line-height:1.5; white-space:normal;">' + s + '</span>' +
+      '</div>'
     ).join('');
 
     document.getElementById('drawer-overlay').style.display = 'block';
-    document.getElementById('drawer').style.display = 'block';
-    requestAnimationFrame(() => {
-      document.getElementById('drawer-overlay').style.opacity = '1';
-      document.getElementById('drawer').classList.add('open');
-    });
+    requestAnimationFrame(() => { document.getElementById('drawer').style.right = '0'; });
   }
 
   function closeDrawer() {
-    document.getElementById('drawer').classList.remove('open');
-    document.getElementById('drawer-overlay').style.opacity = '0';
-    setTimeout(() => {
-      document.getElementById('drawer').style.display = 'none';
-      document.getElementById('drawer-overlay').style.display = 'none';
-    }, 250);
+    document.getElementById('drawer').style.right = '-400px';
+    setTimeout(() => { document.getElementById('drawer-overlay').style.display = 'none'; }, 300);
   }
 
   // ── NAVIGATION ──
