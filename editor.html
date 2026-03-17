@@ -82,8 +82,8 @@
   .step-divider:hover .step-divider-btn{opacity:1}
   .step-divider-btn:hover{border-color:var(--text-muted);color:var(--text-secondary);box-shadow:var(--shadow-sm)}
 
-  .step{position:relative;padding:0 4px}
-  .step-header{display:flex;align-items:center;gap:6px;padding:10px 8px 6px}
+  .step{position:relative;padding:20px 16px}
+  .step-header{display:flex;align-items:center;gap:6px;padding:0 0 8px}
   .step-status-icon{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
   .step-status-icon.verified{color:var(--green)}
   .step-status-icon.draft{color:var(--neutral)}
@@ -96,17 +96,19 @@
   .step-act{width:26px;height:26px;border:none;background:transparent;border-radius:var(--radius-xs);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
   .step-act:hover{background:rgba(0,0,0,.05);color:var(--text)}
 
-  /* Original text from TMS — Retool style: bold text above block */
-  .step-original{margin:0 8px 4px;padding:0 2px;font-size:13px;font-weight:400;color:var(--text);line-height:1.5}
+  /* Original text from TMS */
+  .step-original{margin:0 0 4px;padding:10px 0;font-size:13px;font-weight:400;color:var(--text);line-height:1.5}
 
-  .step-block{margin:0 8px 8px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden}
-  .step-block.assert-block{border-color:rgba(34,197,94,.3)}
-  .action-line{display:flex;align-items:center;gap:5px;padding:7px 10px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+  .step-block{margin:0 0 0;border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden}
+  .step-block+.step-original{margin-top:12px}
+  .step-block.assert-block{border-color:rgba(22,163,74,.3)}
+  .action-line{display:flex;align-items:center;gap:6px;padding:8px 10px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
   .action-line:last-child{border-bottom:none}
+  .action-icon{width:16px;height:16px;flex-shrink:0;color:var(--text-muted);display:flex;align-items:center;justify-content:center}
   .action-text{font-size:12.5px;color:var(--text)}
   .action-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;font-size:11px;font-weight:500;border-radius:3px;white-space:nowrap}
-  .action-chip.variable{background:rgba(234,179,8,.08);color:var(--yellow-text);border:1px solid rgba(234,179,8,.15)}
-  .action-chip.locator{background:rgba(59,130,246,.06);color:var(--blue-text);border:1px solid rgba(59,130,246,.12)}
+  .action-chip.variable{background:rgba(234,179,8,.06);color:var(--yellow-text);border:1px solid rgba(234,179,8,.2)}
+  .action-chip.locator{background:transparent;color:var(--blue-text);border:1px solid rgba(37,99,235,.25)}
   .action-chip svg.lu{width:10px;height:10px;opacity:.6}
 
   .dropdown{display:none;position:absolute;right:8px;top:40px;background:var(--bg-white);border:1px solid var(--border-strong);border-radius:var(--radius-sm);box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px;min-width:220px;z-index:50}
@@ -162,6 +164,10 @@
   <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol>
   <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></symbol>
+  <symbol id="i-text-cursor" viewBox="0 0 24 24"><path d="M17 22h-1a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h1"/><path d="M7 22h1a4 4 0 0 0 4-4V6a4 4 0 0 0-4-4H7"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-pointer" viewBox="0 0 24 24"><path d="m9 9 5 12 1.8-5.2L21 14Z"/><path d="M7.2 2.2 8 5.1"/><path d="m5.1 8-2.9-.8"/><path d="M14 4.1 12 6"/><path d="m6 12-1.9 2"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-check-sq" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></symbol>
 </svg>
 
 <div class="topbar">
@@ -208,6 +214,7 @@
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-fast-forward"/></svg>Генерация с этого шага</div>
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-mic"/></svg>Записать вручную</div>
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-plus-circle"/></svg>Добавить проверку</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-pencil"/></svg>Редактировать текст шага</div>
                 <div class="dd-sep"></div>
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить результаты</div>
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
@@ -215,13 +222,13 @@
             </div>
             <div class="step-original">Ввести логин и пароль, нажать кнопку Login</div>
             <div class="step-block">
-              <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>login</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле username</span></div>
-              <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>pass</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле password</span></div>
-              <div class="action-line"><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Login</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>login</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле username</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>pass</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле password</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-pointer"/></svg></span><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Login</span></div>
             </div>
             <div class="step-original">Пользователь авторизован, открыта главная страница</div>
             <div class="step-block assert-block">
-              <div class="action-line"><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>главная страница</span><span class="action-text">отображается</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-eye"/></svg></span><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>главная страница</span><span class="action-text">отображается</span></div>
             </div>
           </div>
 
@@ -241,6 +248,7 @@
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-fast-forward"/></svg>Генерация с этого шага</div>
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-mic"/></svg>Записать вручную</div>
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-plus-circle"/></svg>Добавить проверку</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-pencil"/></svg>Редактировать текст шага</div>
                 <div class="dd-sep"></div>
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить результаты</div>
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
@@ -248,11 +256,11 @@
             </div>
             <div class="step-original">Ввести новое имя в поле name</div>
             <div class="step-block">
-              <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>new-name</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле name</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-text-cursor"/></svg></span><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-braces"/></svg>new-name</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле name</span></div>
             </div>
             <div class="step-original">Кнопка Save активна, нажать Save</div>
             <div class="step-block assert-block">
-              <div class="action-line"><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Save</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-check-sq"/></svg></span><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Save</span></div>
             </div>
           </div>
 
@@ -272,6 +280,7 @@
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-fast-forward"/></svg>Генерация с этого шага</div>
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-mic"/></svg>Записать вручную</div>
                 <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-plus-circle"/></svg>Добавить проверку</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-pencil"/></svg>Редактировать текст шага</div>
                 <div class="dd-sep"></div>
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить результаты</div>
                 <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
@@ -279,7 +288,7 @@
             </div>
             <div class="step-original">Отображается уведомление «Сохранено»</div>
             <div class="step-block assert-block">
-              <div class="action-line"><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>уведомление «Сохранено»</span><span class="action-text">отображается</span></div>
+              <div class="action-line"><span class="action-icon"><svg class="lu" width="14" height="14"><use href="#i-eye"/></svg></span><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>уведомление «Сохранено»</span><span class="action-text">отображается</span></div>
             </div>
           </div>
 
