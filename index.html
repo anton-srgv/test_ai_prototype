@@ -311,40 +311,6 @@
   </div>
 </div>
 
-<!-- Editor Page (hidden by default) -->
-<div id="editor-page" style="display:none; position:fixed; inset:0; background:var(--bg); z-index:100;">
-  <div class="layout" style="height:100vh;">
-    <div class="sidebar">
-      <div class="sidebar-brand"><div class="sidebar-brand-logo">T</div><div class="sidebar-brand-name">Test AI</div></div>
-      <div class="sidebar-project-select"><svg class="lu" width="15" height="15" style="color:var(--text-muted)"><use href="#i-folder"/></svg><span>Sentinel</span><span class="sp-chevron"><svg class="lu" width="14" height="14"><use href="#i-cud"/></svg></span></div>
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-bottom">
-        <div class="sidebar-item" onclick="navigateToList()" style="cursor:pointer;"><svg class="lu s-icon" width="15" height="15"><use href="#i-arrow-left"/></svg>Назад к списку</div>
-      </div>
-    </div>
-    <div class="main">
-      <div class="main-card" style="padding:32px 40px;">
-        <!-- Breadcrumb -->
-        <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); margin-bottom:20px;">
-          <span style="cursor:pointer;" onclick="navigateToList()">Тест-кейсы</span>
-          <span>›</span>
-          <span id="editor-section" style="cursor:pointer;" onclick="navigateToList()">Секция</span>
-          <span>›</span>
-          <span id="editor-breadcrumb" style="color:var(--text-secondary);">Название</span>
-        </div>
-        <!-- Title -->
-        <div id="editor-title" style="font-size:22px; font-weight:700; letter-spacing:-0.03em; color:var(--text); margin-bottom:8px;"></div>
-        <div id="editor-status-line" style="display:flex; align-items:center; gap:12px; margin-bottom:32px;"></div>
-        <!-- Placeholder content -->
-        <div style="border:2px dashed var(--border); border-radius:var(--radius); padding:48px; text-align:center; color:var(--text-muted);">
-          <div style="font-size:15px; font-weight:500; margin-bottom:8px;">Редактор тест-кейса</div>
-          <div style="font-size:13px;">Здесь будет редактор шагов, браузер и панель свойств</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Extra icon symbols -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
   <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="m10 14 11-11"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
@@ -394,7 +360,9 @@
     });
   });
 
-  document.addEventListener('click', () => { ctxMenu.style.display = 'none'; });
+  document.addEventListener('click', (e) => {
+    if (!ctxMenu.contains(e.target)) ctxMenu.style.display = 'none';
+  });
 
   ctxMenu.querySelectorAll('.ctx-item').forEach(item => {
     item.addEventListener('click', (e) => {
@@ -465,16 +433,11 @@
   // ── NAVIGATION ──
   function navigateToEditor() {
     closeDrawer();
-    const data = getRowData();
-    document.getElementById('editor-title').textContent = data.name || 'Тест-кейс';
-    document.getElementById('editor-breadcrumb').textContent = data.name || '';
-    document.getElementById('editor-section').textContent = data.section || 'Секция';
-    document.getElementById('editor-status-line').innerHTML = data.status + '<span style="font-size:12px; color:var(--text-muted);">' + data.date + '</span>';
-    document.getElementById('editor-page').style.display = 'block';
+    window.location.href = 'editor.html';
   }
 
   function navigateToList() {
-    document.getElementById('editor-page').style.display = 'none';
+    window.location.href = 'index.html';
   }
 </script>
 </body>
