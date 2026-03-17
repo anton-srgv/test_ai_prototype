@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test AI — Импорт из TMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#F9F9FB;--bg-white:#fff;--bg-hover:#f5f5f7;
+    --border:rgba(0,0,0,.10);--border-strong:rgba(0,0,0,.20);
+    --text:#111;--text-secondary:#444;--text-muted:#71717a;--text-placeholder:#a1a1aa;
+    --accent:#3E63DD;--accent-hover:#3358C4;--accent-light:rgba(62,99,221,.06);
+    --green:#16a34a;--green-text:#15803d;
+    --blue:#2563eb;--blue-text:#1d4ed8;
+    --yellow:#ca8a04;--yellow-text:#854d0e;
+    --red:#dc2626;--red-text:#b91c1c;
+    --neutral:#71717a;
+    --mono:'SF Mono',ui-monospace,'Cascadia Code',monospace;
+    --sans:'Golos Text',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --radius:10px;--radius-sm:6px;--radius-xs:4px;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+    --shadow-md:0 2px 8px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+    --shadow-card:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+    --transition:.15s cubic-bezier(.4,0,.2,1)
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;height:100vh;overflow:hidden}
+  svg.lu{display:inline-block;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+  /* Tooltip */
+  [data-tip]{position:relative}
+  [data-tip]:hover::after{content:attr(data-tip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#18181b;color:#fff;font-size:11px;padding:4px 9px;border-radius:var(--radius-xs);white-space:nowrap;z-index:9999;pointer-events:none}
+
+  /* ── TOPBAR ── */
+  .topbar{height:56px;display:flex;align-items:center;padding:0 24px;gap:16px;border-bottom:1px solid var(--border);background:var(--bg-white)}
+  .topbar-back{width:32px;height:32px;border:none;background:transparent;border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+  .topbar-back:hover{background:var(--bg-hover);color:var(--text)}
+  .topbar-title{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-.02em}
+  .topbar-sub{font-size:13px;color:var(--text-muted)}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .topbar-selected{font-size:13px;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+  .topbar-selected strong{font-weight:600;color:var(--accent)}
+
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);border:1px solid var(--border-strong);background:var(--bg-white);color:var(--text-secondary);cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all var(--transition);box-shadow:var(--shadow-sm)}
+  .btn:hover{background:var(--bg-hover);color:var(--text);box-shadow:var(--shadow-md)}
+  .btn:active{transform:scale(.98)}
+  .btn svg.lu{width:14px;height:14px;opacity:.5}.btn:hover svg.lu{opacity:.7}
+  .btn.primary{background:var(--accent);border-color:transparent;color:#fff;box-shadow:0 1px 3px rgba(62,99,221,.25)}
+  .btn.primary:hover{background:var(--accent-hover)}.btn.primary svg.lu{opacity:.8}
+  .btn.primary:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+
+  /* ── LAYOUT ── */
+  .import-layout{display:flex;height:calc(100vh - 56px)}
+
+  /* ── LEFT: Project tree ── */
+  .project-tree{width:280px;border-right:1px solid var(--border);background:var(--bg-white);overflow-y:auto;display:flex;flex-direction:column}
+  .project-tree::-webkit-scrollbar{width:5px}
+  .project-tree::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:3px}
+  .pt-header{padding:16px 16px 12px;border-bottom:1px solid var(--border)}
+  .pt-header-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:8px}
+  .pt-search{display:flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-white)}
+  .pt-search svg.lu{width:14px;height:14px;color:var(--text-placeholder)}
+  .pt-search input{border:none;outline:none;font-size:12px;font-family:var(--sans);color:var(--text);width:100%;background:transparent}
+  .pt-search input::placeholder{color:var(--text-placeholder)}
+  .pt-list{flex:1;padding:8px}
+
+  .pt-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);margin-bottom:2px}
+  .pt-item:hover{background:rgba(0,0,0,.03)}
+  .pt-item.active{background:var(--accent-light);color:var(--accent)}
+  .pt-item.active .pt-icon{color:var(--accent)}
+  .pt-icon{width:16px;height:16px;color:var(--text-muted);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .pt-name{font-size:13px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pt-count{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0}
+  .pt-item.all{font-weight:600}
+
+  /* ── RIGHT: Test case list ── */
+  .case-list{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .cl-toolbar{display:flex;align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--bg-white)}
+  .cl-search{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-white);width:280px;transition:all var(--transition)}
+  .cl-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(62,99,221,.08)}
+  .cl-search svg.lu{width:14px;height:14px;color:var(--text-placeholder)}
+  .cl-search input{border:none;outline:none;font-size:13px;font-family:var(--sans);color:var(--text);width:100%;background:transparent}
+  .cl-search input::placeholder{color:var(--text-placeholder)}
+  .cl-filter{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;font-size:12px;font-weight:500;border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;background:var(--bg-white);transition:all var(--transition);box-shadow:var(--shadow-sm)}
+  .cl-filter:hover{background:var(--bg-hover);color:var(--text)}
+  .cl-filter .cd{font-size:8px;opacity:.4}
+  .cl-selectall{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);cursor:pointer;user-select:none}
+  .cl-selectall:hover{color:var(--text-secondary)}
+
+  .cl-body{flex:1;overflow-y:auto;padding:0 20px 24px}
+  .cl-body::-webkit-scrollbar{width:6px}
+  .cl-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:3px}
+
+  /* Section header in case list */
+  .cl-section{display:flex;align-items:center;gap:6px;padding:14px 0 6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--text-muted);position:sticky;top:0;background:var(--bg);z-index:2}
+  .cl-section-count{font-weight:400}
+
+  /* Case row */
+  .case-row{display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--transition)}
+  .case-row:hover{background:rgba(0,0,0,.02)}
+  .case-row.selected{background:var(--accent-light)}
+  .case-check{width:18px;height:18px;border:1.5px solid var(--border-strong);border-radius:4px;cursor:pointer;appearance:none;-webkit-appearance:none;background:var(--bg-white);flex-shrink:0;transition:all var(--transition)}
+  .case-check:checked{background:var(--accent);border-color:var(--accent);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 5L6.5 10.5L4 8' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:14px;background-position:center;background-repeat:no-repeat}
+  .case-info{flex:1;min-width:0}
+  .case-name{font-size:13px;font-weight:500;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .case-meta{display:flex;align-items:center;gap:8px;margin-top:2px}
+  .case-meta-item{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:3px}
+  .case-meta-item svg.lu{width:11px;height:11px;opacity:.5}
+  .case-pri{width:14px;height:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+  .case-pri.high{color:var(--red-text)}
+  .case-pri.medium{color:var(--text-muted)}
+  .case-steps-badge{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;display:flex;align-items:center;gap:3px}
+  .case-steps-badge svg.lu{width:12px;height:12px;opacity:.4}
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar{display:none;padding:12px 24px;border-top:1px solid var(--border);background:var(--bg-white);align-items:center;gap:12px;box-shadow:0 -2px 8px rgba(0,0,0,.04)}
+  .bottom-bar.show{display:flex}
+  .bb-count{font-size:13px;color:var(--text-secondary)}
+  .bb-count strong{font-weight:600;color:var(--accent)}
+  .bb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></symbol>
+  <symbol id="i-check-sq" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></symbol>
+</svg>
+
+<div class="topbar">
+  <button class="topbar-back" onclick="window.location.href='index.html'"><svg class="lu" width="16" height="16"><use href="#i-arrow-left"/></svg></button>
+  <div>
+    <div class="topbar-title">Импорт из TestIT</div>
+    <div class="topbar-sub">Выберите тест-кейсы для импорта в проект Sentinel</div>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-selected" id="selected-label">Выбрано: <strong id="selected-count">0</strong></span>
+    <button class="btn primary" id="import-btn" disabled><svg class="lu" width="14" height="14"><use href="#i-download"/></svg>Импортировать</button>
+  </div>
+</div>
+
+<div class="import-layout">
+
+  <!-- Project Tree -->
+  <div class="project-tree">
+    <div class="pt-header">
+      <div class="pt-header-title">Проекты TMS</div>
+      <div class="pt-search"><svg class="lu"><use href="#i-search"/></svg><input type="text" placeholder="Поиск проекта…"></div>
+    </div>
+    <div class="pt-list">
+      <div class="pt-item all active" data-project="all">
+        <span class="pt-icon"><svg class="lu" width="16" height="16"><use href="#i-layers"/></svg></span>
+        <span class="pt-name">Все проекты</span>
+        <span class="pt-count">30</span>
+      </div>
+      <div class="pt-item" data-project="dba">
+        <span class="pt-icon"><svg class="lu" width="15" height="15"><use href="#i-folder"/></svg></span>
+        <span class="pt-name">DBA — Энергетика</span>
+        <span class="pt-count">3</span>
+      </div>
+      <div class="pt-item" data-project="stroykod">
+        <span class="pt-icon"><svg class="lu" width="15" height="15"><use href="#i-folder"/></svg></span>
+        <span class="pt-name">Строй.Код</span>
+        <span class="pt-count">2</span>
+      </div>
+      <div class="pt-item" data-project="bpmobile">
+        <span class="pt-icon"><svg class="lu" width="15" height="15"><use href="#i-folder"/></svg></span>
+        <span class="pt-name">BPMobile</span>
+        <span class="pt-count">2</span>
+      </div>
+      <div class="pt-item" data-project="yclients">
+        <span class="pt-icon"><svg class="lu" width="15" height="15"><use href="#i-folder"/></svg></span>
+        <span class="pt-name">Yclients</span>
+        <span class="pt-count">5</span>
+      </div>
+      <div class="pt-item" data-project="agima">
+        <span class="pt-icon"><svg class="lu" width="15" height="15"><use href="#i-folder"/></svg></span>
+        <span class="pt-name">Agima — Батч</span>
+        <span class="pt-count">2</span>
+      </div>
+      <div class="pt-item" data-project="askona">
+        <span class="pt-icon"><svg class="lu" width="15" height="15"><use href="#i-folder"/></svg></span>
+        <span class="pt-name">Askona</span>
+        <span class="pt-count">9</span>
+      </div>
+      <div class="pt-item" data-project="casting">
+        <span class="pt-icon"><svg class="lu" width="15" height="15"><use href="#i-folder"/></svg></span>
+        <span class="pt-name">Кастинг-платформа</span>
+        <span class="pt-count">7</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case List -->
+  <div class="case-list">
+    <div class="cl-toolbar">
+      <div class="cl-search"><svg class="lu"><use href="#i-search"/></svg><input type="text" placeholder="Поиск тест-кейсов…"></div>
+      <div class="cl-filter">Приоритет <span class="cd">▾</span></div>
+      <div class="cl-filter">Статус <span class="cd">▾</span></div>
+      <div class="cl-selectall" onclick="toggleAll()"><input type="checkbox" class="case-check" id="check-all"> Выбрать все</div>
+    </div>
+
+    <div class="cl-body" id="case-body">
+
+      <div class="cl-section">DBA — Энергетика <span class="cl-section-count">3</span></div>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Создание ЛО / ТМ / пролет: успех</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>13 шагов</span><span class="case-meta-item">Preconditions</span></div></div><span class="case-pri high">↑</span><span class="case-steps-badge">Ready</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Создание входящего подключения: ПО без вышестоящего / ЛО</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>6 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">Ready</span></label>
+
+      <div class="cl-section">Строй.Код <span class="cl-section-count">2</span></div>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Проверка множественного поиска на главной странице</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>9 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NotReady</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Проверка статичной формы захвата</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>3 шага</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NotReady</span></label>
+
+      <div class="cl-section">BPMobile <span class="cl-section-count">2</span></div>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Авторизация</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>4 шага</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NotReady</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">#2374 Редактирование полей ФО в записи</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>9 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NotReady</span></label>
+
+      <div class="cl-section">Yclients <span class="cl-section-count">5</span></div>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Регистрация пользователя</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>7 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NotReady</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Авторизация и создание нового проекта</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>3 шага</span><span class="case-meta-item">Preconditions</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Скачивание документа PDF в формате DOC</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>5 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Регистрация пользователя через почту</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>6 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">скролл-чек</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>2 шага</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NotReady</span></label>
+
+      <div class="cl-section">Agima — Батч <span class="cl-section-count">2</span></div>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">E2E#3 Лимит на количество файлов для батч обработки</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>8 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">E2E#4 Код верификации</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>5 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+
+      <div class="cl-section">Askona <span class="cl-section-count">9</span></div>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Сортировка в листинге</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>9 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">Ready</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Навигация по страницам сайта</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>10 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">Ready</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Оформление заказа с доставкой на дом</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>9 шагов</span><span class="case-meta-item">Preconditions</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">Ready</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Избранное и сравнение на листинге</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>10 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Доставка и самовывоз на КТ подушек</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>22 шага</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Изменение прайсовой зоны</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>6 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Бронирование товара неавторизованным пользователем</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>22 шага</span><span class="case-meta-item">Preconditions</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Бронирование товара через все типы точек выдачи</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>43 шага</span><span class="case-meta-item">Preconditions</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Страница салонов: фильтры, карта и смена города</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>16 шагов</span><span class="case-meta-item">Preconditions</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+
+      <div class="cl-section">Кастинг-платформа <span class="cl-section-count">7</span></div>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Регистрация актёра с неполным номером телефона</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>4 шага</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">Ready</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Проверка отображения контента после создания в админ-панели</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>11 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Авторизация соискателя</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>5 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Регистрация соискателя с существующим номером</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>5 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Заказ без регистрации</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>6 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Авторизация по почте и паролю</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>7 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+      <label class="case-row"><input type="checkbox" class="case-check cc"><div class="case-info"><div class="case-name">Добавление баннера</div><div class="case-meta"><span class="case-meta-item"><svg class="lu"><use href="#i-list"/></svg>6 шагов</span></div></div><span class="case-pri medium">—</span><span class="case-steps-badge">NeedsWork</span></label>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom action bar -->
+<div class="bottom-bar" id="bottom-bar">
+  <span class="bb-count">Выбрано <strong id="bb-count">0</strong> тест-кейсов</span>
+  <div class="bb-right">
+    <button class="btn" onclick="clearAll()">Сбросить</button>
+    <button class="btn primary"><svg class="lu" width="14" height="14"><use href="#i-download"/></svg>Импортировать</button>
+  </div>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('.cc');
+  const bottomBar = document.getElementById('bottom-bar');
+  const bbCount = document.getElementById('bb-count');
+  const selCount = document.getElementById('selected-count');
+  const importBtn = document.getElementById('import-btn');
+
+  function updateCount() {
+    const n = document.querySelectorAll('.cc:checked').length;
+    bbCount.textContent = n;
+    selCount.textContent = n;
+    bottomBar.classList.toggle('show', n > 0);
+    importBtn.disabled = n === 0;
+    // Highlight selected rows
+    document.querySelectorAll('.case-row').forEach(r => {
+      const cb = r.querySelector('.cc');
+      r.classList.toggle('selected', cb && cb.checked);
+    });
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateCount));
+
+  function toggleAll() {
+    const all = document.getElementById('check-all');
+    checkboxes.forEach(cb => cb.checked = all.checked);
+    updateCount();
+  }
+
+  function clearAll() {
+    document.getElementById('check-all').checked = false;
+    checkboxes.forEach(cb => cb.checked = false);
+    updateCount();
+  }
+
+  // Project tree filtering
+  document.querySelectorAll('.pt-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.pt-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
