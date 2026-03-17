@@ -4,86 +4,95 @@
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--sans:'Golos Text',system-ui,sans-serif;--bg:#F9F9FB;--bg-white:#fff;--accent:#3E63DD;--accent-light:rgba(62,99,221,.06);--text:#18181b;--text-sec:#71717a;--text-muted:#a1a1aa;--border:rgba(0,0,0,.07);--border-s:rgba(0,0,0,.13);--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--orange:#ea580c;--r:8px;--rs:6px;--t:.15s ease}
+:root{--sans:'Golos Text',system-ui,sans-serif;--bg:#F9F9FB;--bg-white:#fff;--accent:#3E63DD;--accent-light:rgba(62,99,221,.06);--accent-hover:rgba(62,99,221,.10);--text:#18181b;--text-sec:#71717a;--text-muted:#a1a1aa;--border:rgba(0,0,0,.07);--border-s:rgba(0,0,0,.13);--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--orange:#ea580c;--r:8px;--rs:6px;--t:.15s ease}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-.topbar{height:52px;background:var(--bg-white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
-.back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-sec);cursor:pointer;text-decoration:none;transition:color var(--t)}.back:hover{color:var(--accent)}
-.back svg{width:16px;height:16px}
-.tb-title{font-size:15px;font-weight:600}
+/* TOPBAR — same as editor */
+.topbar{height:48px;background:var(--bg-white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
+.back-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);border:1px solid var(--border);background:var(--bg-white);cursor:pointer;transition:all var(--t);color:var(--text-sec);flex-shrink:0}
+.back-btn:hover{border-color:var(--border-s);color:var(--text);background:rgba(0,0,0,.02)}
+.back-btn svg{width:16px;height:16px}
+.tb-title{font-size:14px;font-weight:600}
 .tb-badge{font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--accent-light);color:var(--accent)}
 .spacer{flex:1}
-.steps-ind{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)}
-.sd{width:8px;height:8px;border-radius:50%;background:var(--border-s)}.sd.on{background:var(--accent)}.sd.done{background:var(--green)}
+.steps-ind{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}
+.sd{width:7px;height:7px;border-radius:50%;background:var(--border-s);transition:background .2s}.sd.on{background:var(--accent)}
 
 .main{flex:1;display:flex;overflow:hidden}
 
-/* sidebar */
-.side{width:280px;background:var(--bg-white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.side-hdr{padding:14px 16px 10px;border-bottom:1px solid var(--border)}
-.sh-t{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:8px}
-.s-search{width:100%;padding:7px 10px 7px 32px;border:1px solid var(--border-s);border-radius:var(--rs);font-size:12px;font-family:var(--sans);outline:none;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") 10px center no-repeat;transition:border-color var(--t)}
-.s-search:focus{border-color:var(--accent)}
-.s-tree{flex:1;overflow-y:auto;padding:8px}
+/* SIDEBAR — project tree */
+.side{width:260px;background:var(--bg-white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.side-hdr{padding:12px 14px 10px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--border)}
+.s-tree{flex:1;overflow-y:auto;padding:6px}
 .tp{margin-bottom:2px}
 .tp-h{display:flex;align-items:center;gap:6px;padding:7px 8px;border-radius:var(--rs);cursor:pointer;font-size:12.5px;font-weight:600;transition:background var(--t);user-select:none}
 .tp-h:hover{background:rgba(0,0,0,.03)}.tp-h.act{background:var(--accent-light);color:var(--accent)}
-.chv{width:14px;height:14px;transition:transform .2s;flex-shrink:0;opacity:.5}
-.tp-h.opn .chv{transform:rotate(90deg)}
+.chv{width:14px;height:14px;transition:transform .2s;flex-shrink:0;opacity:.4}
+.tp-h.opn .chv{transform:rotate(90deg);opacity:.7}
 .tp-h .cnt{margin-left:auto;font-size:11px;font-weight:400;color:var(--text-muted);background:rgba(0,0,0,.04);padding:1px 6px;border-radius:8px}
 .tp-secs{padding-left:20px;display:none}.tp.opn .tp-secs{display:block}
-.ts{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--rs);cursor:pointer;font-size:12px;color:var(--text-sec);transition:all var(--t)}
+.ts{display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:var(--rs);cursor:pointer;font-size:12px;color:var(--text-sec);transition:all var(--t)}
 .ts:hover{background:rgba(0,0,0,.03);color:var(--text)}.ts.act{background:var(--accent-light);color:var(--accent);font-weight:500}
 .ts .sc{margin-left:auto;font-size:11px;color:var(--text-muted)}
 
-/* content */
+/* CONTENT */
 .content{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.c-toolbar{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--bg-white);flex-shrink:0}
-.sel-all{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-sec);cursor:pointer}
+.c-toolbar{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--bg-white);flex-shrink:0}
+.sel-all{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-sec);cursor:pointer;flex-shrink:0}
 .sel-all input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
-.fpills{display:flex;gap:4px}
-.fp{padding:4px 10px;font-size:11px;font-weight:500;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text-sec);cursor:pointer;transition:all var(--t);font-family:var(--sans)}
-.fp:hover{border-color:var(--border-s);color:var(--text)}.fp.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* search */
+.tc-search{flex:1;max-width:320px;padding:6px 10px 6px 30px;border:1px solid var(--border);border-radius:var(--rs);font-size:12px;font-family:var(--sans);outline:none;background:var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") 10px center no-repeat;transition:border-color var(--t)}
+.tc-search:focus{border-color:var(--accent)}
+.tc-search::placeholder{color:var(--text-muted)}
+/* priority dropdown */
+.prio-select{padding:5px 8px;border:1px solid var(--border);border-radius:var(--rs);font-size:12px;font-family:var(--sans);color:var(--text-sec);background:var(--bg-white);cursor:pointer;outline:none}
+.prio-select:focus{border-color:var(--accent)}
 
 .list{flex:1;overflow-y:auto;background:var(--bg)}
 .sg{margin:0 16px}
 .sh{position:sticky;top:0;padding:10px 8px 6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);background:rgba(249,249,251,.97);z-index:5;display:flex;align-items:center;gap:6px}
 .sh .scb{font-weight:400;font-size:10px;background:rgba(0,0,0,.05);padding:1px 6px;border-radius:8px}
 
-.row{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:1px 0;border-radius:var(--rs);background:var(--bg-white);border:1px solid var(--border);cursor:pointer;transition:all var(--t)}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:1px 0;border-radius:var(--rs);background:var(--bg-white);border:1px solid var(--border);cursor:pointer;transition:all var(--t)}
 .row:hover{border-color:var(--border-s);box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .row.sel{border-color:rgba(62,99,221,.3);background:rgba(62,99,221,.02)}
+.row.conflict{border-left:3px solid var(--yellow)}
 .row .cb{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
 .ri{flex:1;min-width:0}
-.rn{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rm{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:11px;color:var(--text-muted)}
+.rn{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.rn .id-badge{font-size:10px;font-weight:400;color:var(--text-muted);font-family:var(--sans)}
+.rm{display:flex;align-items:center;gap:8px;margin-top:2px;font-size:11px;color:var(--text-muted)}
 .rm .mi{display:flex;align-items:center;gap:3px}
 .rm svg{width:11px;height:11px;opacity:.5}
-.rbs{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:300px}
+.rbs{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:280px}
 .rb{font-size:10px;font-weight:500;padding:2px 6px;border-radius:3px;white-space:nowrap}
 .rb.ph{background:rgba(220,38,38,.06);color:var(--red);border:1px solid rgba(220,38,38,.15)}
 .rb.pg{background:rgba(234,88,12,.06);color:var(--orange);border:1px solid rgba(234,88,12,.15)}
 .rb.pm{background:rgba(0,0,0,.03);color:var(--text-muted);border:1px solid var(--border)}
 .rb.au{background:rgba(22,163,74,.06);color:var(--green);border:1px solid rgba(22,163,74,.15)}
 .rb.tg{background:rgba(0,0,0,.03);color:var(--text-muted);border:1px solid var(--border)}
+.rb.imp{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.2)}
 
-.fbar{height:56px;background:var(--bg-white);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+.fbar{height:52px;background:var(--bg-white);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
 .fi{font-size:12px;color:var(--text-sec)}.fi strong{color:var(--text);font-weight:600}
-.btn{padding:8px 16px;border-radius:var(--rs);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;border:1px solid var(--border-s);background:var(--bg-white);color:var(--text);transition:all var(--t)}.btn:hover{background:rgba(0,0,0,.02)}
+.btn{padding:7px 14px;border-radius:var(--rs);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;border:1px solid var(--border-s);background:var(--bg-white);color:var(--text);transition:all var(--t)}.btn:hover{background:rgba(0,0,0,.02)}
 .btn.pr{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.pr:hover{background:#3554c2}.btn.pr:disabled{opacity:.4;cursor:default}
 
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;align-items:center;justify-content:center}.ov.show{display:flex}
-.ccard{background:var(--bg-white);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.15);width:480px;max-height:80vh;overflow:hidden}
+/* CONFIRM */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;align-items:center;justify-content:center;animation:fadeIn .15s}.ov.show{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.ccard{background:var(--bg-white);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.15);width:460px;max-height:80vh;overflow:hidden}
 .ch{padding:20px 24px 16px;border-bottom:1px solid var(--border)}.ch h2{font-size:16px;font-weight:600}.ch p{font-size:12px;color:var(--text-sec);margin-top:4px}
 .cbody{padding:16px 24px;max-height:400px;overflow-y:auto}
-.cs{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}.cs:last-child{border:none}
-.cs .l{font-size:13px;color:var(--text-sec)}.cs .v{font-size:13px;font-weight:600}
-.cw{margin-top:12px;padding:10px 12px;border-radius:var(--rs);font-size:12px;display:flex;align-items:flex-start;gap:8px}
+.cw{margin-bottom:10px;padding:10px 12px;border-radius:var(--rs);font-size:12px;display:flex;align-items:flex-start;gap:8px;line-height:1.4}
 .cw svg{width:16px;height:16px;flex-shrink:0;margin-top:1px}
-.cw.warn{background:rgba(234,179,8,.06);border:1px solid rgba(234,179,8,.2);color:var(--yellow)}
-.cw.info{background:rgba(62,99,221,.04);border:1px solid rgba(62,99,221,.15);color:var(--accent)}
-.cps{margin-top:12px}.cpr{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px}.cpr .n{font-weight:500;flex:1}.cpr .c{color:var(--text-muted)}
-.cfooter{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.cw.warn{background:rgba(234,179,8,.06);border:1px solid rgba(234,179,8,.2);color:#92400e}
+.cw.info{background:rgba(62,99,221,.04);border:1px solid rgba(62,99,221,.15);color:#3b4fa8}
+.cw.danger{background:rgba(220,38,38,.04);border:1px solid rgba(220,38,38,.12);color:#991b1b}
+.cps{margin-top:4px}.cps-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:6px}
+.cpr{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12.5px;border-bottom:1px solid var(--border)}.cpr:last-child{border:none}
+.cpr .n{font-weight:500;flex:1}.cpr .c{color:var(--text-muted);font-size:11px}
+.cfooter{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
 
 .es{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-muted);gap:8px;padding:40px}
 .es svg{width:40px;height:40px;opacity:.3}.es .et{font-size:14px;font-weight:500;color:var(--text-sec)}
@@ -93,8 +102,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13
 </head><body>
 
 <div class="topbar">
-  <a class="back" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Sentinel</a>
-  <div style="width:1px;height:20px;background:var(--border)"></div>
+  <button class="back-btn" onclick="location.href='index.html'" title="Назад к проекту">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  </button>
   <div class="tb-title">Импорт из TMS</div>
   <div class="tb-badge">TestIT</div>
   <div class="spacer"></div>
@@ -103,19 +113,20 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13
 
 <div class="main">
   <div class="side">
-    <div class="side-hdr"><div class="sh-t">Проекты TestIT</div><input class="s-search" type="text" placeholder="Поиск…" id="srch"></div>
+    <div class="side-hdr">Проекты TestIT</div>
     <div class="s-tree" id="tree"></div>
   </div>
   <div class="content">
     <div class="c-toolbar">
-      <label class="sel-all"><input type="checkbox" id="sa"><span id="sal">Выбрать все</span></label>
-      <div class="spacer"></div>
-      <div class="fpills">
-        <button class="fp on" data-f="all">Все</button>
-        <button class="fp" data-f="highest">Highest</button>
-        <button class="fp" data-f="high">High+</button>
-        <button class="fp" data-f="notauto">Не автоматиз.</button>
-      </div>
+      <label class="sel-all"><input type="checkbox" id="sa"><span>Все</span></label>
+      <input class="tc-search" type="text" placeholder="Поиск по названию, ID или тегу…" id="qry">
+      <select class="prio-select" id="prio">
+        <option value="all">Любой приоритет</option>
+        <option value="Highest">Highest</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
     </div>
     <div class="list" id="lst">
       <div class="es"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><div class="et">Выберите проект слева</div><div>Тест-кейсы появятся здесь</div></div>
@@ -127,72 +138,119 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13
   <div class="fi">Выбрано: <strong id="sc">0</strong> тест-кейсов</div>
   <div class="spacer"></div>
   <button class="btn" onclick="clr()">Сбросить</button>
-  <button class="btn pr" id="ib" disabled onclick="showC()">Импортировать</button>
+  <button class="btn pr" id="ib" disabled onclick="showC()">Далее →</button>
 </div>
 
 <div class="ov" id="ov">
   <div class="ccard">
-    <div class="ch"><h2>Подтверждение импорта</h2><p>Проверьте параметры перед запуском</p></div>
+    <div class="ch"><h2>Подтверждение импорта</h2><p>Проверьте выбранные тест-кейсы</p></div>
     <div class="cbody" id="cb"></div>
     <div class="cfooter"><button class="btn" onclick="hideC()">Назад</button><button class="btn pr" onclick="doImport()">Импортировать</button></div>
   </div>
 </div>
 
 <script>
-const P=[{id:"testai",name:"Test AI",tc:62,secs:[{id:"s1",name:"Регистрация и инвайты",cs:[{id:122,name:"Успешная регистрация нового пользователя",s:9,p:1,pr:"Highest",a:true,tg:["regression","smoke"]},{id:1039,name:"Успешный инвайт ранее зарегистрированного и авторизованного пользователя",s:1,p:7,pr:"Highest",a:true,tg:["regression","smoke"]},{id:1040,name:"Успешный инвайт ранее зарегистрированного и НЕавторизованного пользователя",s:1,p:6,pr:"Highest",a:true,tg:["regression","smoke"]},{id:1041,name:"Успешный инвайт ранее НЕзарегистрированного пользователя",s:1,p:4,pr:"Highest",a:true,tg:["regression","smoke"]},{id:917,name:"Неуспешное приглашение пользователя в организацию",s:1,p:4,pr:"Medium",a:false,tg:["regression"]}]},{id:"s2",name:"Авторизация",cs:[{id:124,name:"Успешная авторизация неподтвержденного пользователя",s:1,p:3,pr:"High",a:true,tg:["regression","smoke"]},{id:128,name:"Неуспешная авторизация без подтверждения email",s:3,p:3,pr:"Medium",a:false,tg:["regression"]},{id:133,name:"Успешная авторизация rejected пользователя",s:1,p:6,pr:"High",a:false,tg:["regression","smoke"]},{id:511,name:"Успешная авторизация подтвержденного пользователя",s:1,p:6,pr:"Highest",a:true,tg:["regression","smoke"]},{id:512,name:"Страница авторизации отображается корректно",s:1,p:0,pr:"Highest",a:true,tg:["regression","smoke"]},{id:513,name:"Неуспешная авторизация — неверный пароль",s:3,p:4,pr:"High",a:true,tg:["regression"]},{id:671,name:"Восстановление пароля от учетной записи",s:3,p:0,pr:"Highest",a:false,tg:["regression","smoke"]}]},{id:"s3",name:"Биллинг",cs:[{id:409,name:"Record шагов не логируется и не биллится",s:3,p:2,pr:"Highest",a:false,tg:["regression","smoke"]},{id:410,name:"Успешно сгенерированные шаги биллятся",s:1,p:1,pr:"Highest",a:false,tg:["regression","smoke"]},{id:411,name:"Ассерты не биллятся (но логируются)",s:1,p:1,pr:"Highest",a:false,tg:["regression","smoke"]},{id:412,name:"При удалении рецепта записи из БД не удаляются",s:1,p:2,pr:"Highest",a:false,tg:["regression","smoke"]},{id:413,name:"Playback шагов не логируется и не биллится",s:1,p:2,pr:"Highest",a:false,tg:["regression","smoke"]}]},{id:"s4",name:"TMS Connections",cs:[{id:134,name:"Неуспешное создание соединения — APIKey invalid",s:6,p:6,pr:"Medium",a:true,tg:["regression"]},{id:148,name:"Успешное удаление соединения TestIT",s:1,p:8,pr:"Highest",a:true,tg:["regression","smoke"]},{id:516,name:"Успешное создание соединения TestIT",s:2,p:2,pr:"Highest",a:true,tg:["regression","smoke"]}]},{id:"s5",name:"Runners",cs:[{id:154,name:"Deploy раннера пользователем SUPERADMIN",s:5,p:4,pr:"Highest",a:true,tg:["regression","smoke"]},{id:158,name:"Снятие резерва с раннера",s:2,p:10,pr:"High",a:true,tg:["regression","smoke"]},{id:160,name:"Резервация раннера",s:2,p:10,pr:"Highest",a:true,tg:["regression","smoke"]},{id:157,name:"Удаление раннера SUPERADMIN",s:2,p:5,pr:"High",a:true,tg:["regression","smoke"]},{id:211,name:"Выход из рецепта → раннер освобождён",s:1,p:2,pr:"High",a:true,tg:["regression"]},{id:214,name:"Обновление страницы не освобождает раннер",s:2,p:3,pr:"High",a:true,tg:["regression","smoke"]},{id:576,name:"Привязка раннера организации",s:3,p:3,pr:"Highest",a:true,tg:["regression","smoke"]},{id:578,name:"Отвязка раннера от организации",s:1,p:3,pr:"Highest",a:true,tg:["regression","smoke"]},{id:220,name:"Закрытие вкладки рецепта",s:1,p:3,pr:"High",a:true,tg:["regression"]}]},{id:"s6",name:"Env Data",cs:[{id:342,name:"Модальное окно создания Api Key test data",s:1,p:0,pr:"High",a:true,tg:["regression","smoke"]},{id:343,name:"Модальное окно создания Login test data",s:1,p:1,pr:"High",a:true,tg:["regression","smoke"]},{id:276,name:"Успешное создание env data в проекте",s:2,p:2,pr:"Highest",a:true,tg:["regression","smoke"]},{id:322,name:"Успешное редактирование Env Data",s:3,p:3,pr:"Highest",a:true,tg:["regression","smoke"]},{id:337,name:"Успешное удаление Env Data",s:3,p:1,pr:"Highest",a:true,tg:["regression","smoke"]},{id:336,name:"Успешное редактирование SUT URL",s:2,p:0,pr:"Highest",a:true,tg:["regression","smoke"]}]},{id:"s7",name:"Virtual Machines",cs:[{id:294,name:"Успешное добавление VM",s:4,p:0,pr:"High",a:false,tg:["regression","smoke"]},{id:295,name:"Неуспешное добавление VM",s:2,p:0,pr:"Medium",a:false,tg:["regression"]},{id:296,name:"Отображение VM to SUPERADMIN",s:1,p:0,pr:"High",a:false,tg:["regression","smoke"]},{id:297,name:"Проверка коннекта до VM",s:2,p:1,pr:"High",a:false,tg:["regression","smoke"]},{id:298,name:"Получение ресурсов VM",s:1,p:1,pr:"High",a:false,tg:["regression","smoke"]}]}]},
-{id:"p1",name:"Строй-код",tc:3,secs:[{id:"p1s",name:"Подключения",cs:[{id:1001,name:"Создание ЛО / ТМ / пролет: успех",s:7,p:4,pr:"High",a:false,tg:[]},{id:1002,name:"Создание входящего подключения: ПО без вышестоящего",s:11,p:2,pr:"High",a:false,tg:[]},{id:1003,name:"Создание ЛО / ТМ / пролет: дубль",s:7,p:4,pr:"Medium",a:false,tg:[]}]}]},
-{id:"p2",name:"Agima",tc:2,secs:[{id:"p2s",name:"Поиск и формы",cs:[{id:1004,name:"Проверка множественного поиска на главной странице",s:4,p:1,pr:"Medium",a:false,tg:[]},{id:1005,name:"Проверка статичной формы захвата",s:6,p:1,pr:"Medium",a:false,tg:[]}]}]},
-{id:"p3",name:"DBA",tc:2,secs:[{id:"p3s",name:"Авторизация и записи",cs:[{id:1006,name:"Авторизация",s:5,p:2,pr:"Medium",a:false,tg:[]},{id:1007,name:"#2374 Редактирование полей ФО в записи",s:12,p:3,pr:"Medium",a:false,tg:[]}]}]},
-{id:"p4",name:"BPMobile",tc:5,secs:[{id:"p4s",name:"Регистрация",cs:[{id:1008,name:"Регистрация пользователя",s:5,p:0,pr:"Medium",a:false,tg:[]},{id:1009,name:"скролл-чек",s:2,p:0,pr:"Medium",a:false,tg:[]},{id:1010,name:"Авторизация и создание нового проекта",s:8,p:0,pr:"Medium",a:false,tg:[]},{id:1011,name:"Скачивание PDF в формате DOC",s:3,p:2,pr:"Medium",a:false,tg:[]},{id:1012,name:"Скачивание PDF в формате PDF",s:3,p:2,pr:"Medium",a:false,tg:[]}]}]},
-{id:"p5",name:"Askona",tc:2,secs:[{id:"p5s",name:"E2E сценарии",cs:[{id:1013,name:"E2E#3 Лимит на количество файлов для батч обработки",s:4,p:2,pr:"Medium",a:false,tg:[]},{id:1014,name:"E2E#4 Код верификации",s:6,p:2,pr:"Medium",a:false,tg:[]}]}]},
-{id:"p6",name:"Yclients",tc:9,secs:[{id:"p6s",name:"Каталог и заказы",cs:[{id:1015,name:"Сортировка в листинге",s:7,p:2,pr:"Medium",a:false,tg:[]},{id:1016,name:"Навигация по страницам сайта",s:10,p:1,pr:"Medium",a:false,tg:[]},{id:1017,name:"Оформление заказа с доставкой на дом",s:15,p:1,pr:"Medium",a:false,tg:[]},{id:1018,name:"Избранное и сравнение на листинге",s:8,p:1,pr:"Medium",a:false,tg:[]},{id:1019,name:"Бронирование товара через все типы точек выдачи",s:43,p:1,pr:"Medium",a:false,tg:[]},{id:1020,name:"Авторизация",s:4,p:1,pr:"Medium",a:false,tg:[]},{id:1021,name:"Регистрация нового пользователя",s:6,p:1,pr:"Medium",a:false,tg:[]},{id:1022,name:"Добавление адреса",s:5,p:2,pr:"Medium",a:false,tg:[]},{id:1023,name:"Обзор корзины",s:3,p:2,pr:"Medium",a:false,tg:[]}]}]},
-{id:"p7",name:"HeadHunter Actors",tc:7,secs:[{id:"p7s",name:"Актёры и соискатели",cs:[{id:1024,name:"Регистрация актёра с неполным номером телефона",s:4,p:3,pr:"Medium",a:false,tg:[]},{id:1025,name:"Проверка отображения контента после создания в админ-панели",s:12,p:2,pr:"Medium",a:false,tg:[]},{id:1026,name:"Авторизация соискателя",s:5,p:1,pr:"Medium",a:false,tg:[]},{id:1027,name:"Регистрация соискателя с существующим номером",s:4,p:1,pr:"Medium",a:false,tg:[]},{id:1028,name:"Регистрация нового соискателя",s:6,p:1,pr:"Medium",a:false,tg:[]},{id:1029,name:"Размещение вакансии работодателем",s:10,p:2,pr:"Medium",a:false,tg:[]},{id:1030,name:"Авторизация работодателя",s:4,p:1,pr:"Medium",a:false,tg:[]}]}]}
+// Simulated "already imported" IDs — for conflict detection
+const IMPORTED=new Set([122,511,512,513,516,148,154,160,276,322,337]);
+
+const P=[{id:"testai",name:"Test AI",tc:62,secs:[{id:"s1",name:"Регистрация и инвайты",cs:[{id:122,name:"Успешная регистрация нового пользователя",s:9,p:1,pr:"Highest",a:true,tg:["regression","smoke"]},{id:1039,name:"Успешный инвайт зарегистрированного и авторизованного пользователя",s:1,p:7,pr:"Highest",a:true,tg:["regression","smoke"]},{id:1040,name:"Успешный инвайт зарегистрированного и НЕавторизованного пользователя",s:1,p:6,pr:"Highest",a:true,tg:["regression","smoke"]},{id:1041,name:"Успешный инвайт НЕзарегистрированного пользователя",s:1,p:4,pr:"Highest",a:true,tg:["regression","smoke"]},{id:917,name:"Неуспешное приглашение пользователя в организацию",s:1,p:4,pr:"Medium",a:false,tg:["regression"]}]},{id:"s2",name:"Авторизация",cs:[{id:124,name:"Успешная авторизация неподтвержденного пользователя",s:1,p:3,pr:"High",a:true,tg:["regression","smoke"]},{id:128,name:"Неуспешная авторизация без подтверждения email",s:3,p:3,pr:"Medium",a:false,tg:["regression"]},{id:133,name:"Успешная авторизация rejected пользователя",s:1,p:6,pr:"High",a:false,tg:["regression","smoke"]},{id:511,name:"Успешная авторизация подтвержденного пользователя",s:1,p:6,pr:"Highest",a:true,tg:["regression","smoke"]},{id:512,name:"Страница авторизации отображается корректно",s:1,p:0,pr:"Highest",a:true,tg:["regression","smoke"]},{id:513,name:"Неуспешная авторизация — неверный пароль",s:3,p:4,pr:"High",a:true,tg:["regression"]},{id:671,name:"Восстановление пароля от учетной записи",s:3,p:0,pr:"Highest",a:false,tg:["regression","smoke"]}]},{id:"s3",name:"Биллинг",cs:[{id:409,name:"Record шагов не логируется и не биллится",s:3,p:2,pr:"Highest",a:false,tg:["regression","smoke"]},{id:410,name:"Успешно сгенерированные шаги биллятся",s:1,p:1,pr:"Highest",a:false,tg:["regression","smoke"]},{id:411,name:"Ассерты не биллятся (но логируются)",s:1,p:1,pr:"Highest",a:false,tg:["regression","smoke"]},{id:412,name:"При удалении рецепта записи из БД не удаляются",s:1,p:2,pr:"Highest",a:false,tg:["regression","smoke"]},{id:413,name:"Playback шагов не логируется и не биллится",s:1,p:2,pr:"Highest",a:false,tg:["regression","smoke"]}]},{id:"s4",name:"TMS Connections",cs:[{id:134,name:"Неуспешное создание соединения — APIKey invalid",s:6,p:6,pr:"Medium",a:true,tg:["regression"]},{id:148,name:"Успешное удаление соединения TestIT",s:1,p:8,pr:"Highest",a:true,tg:["regression","smoke"]},{id:516,name:"Успешное создание соединения TestIT",s:2,p:2,pr:"Highest",a:true,tg:["regression","smoke"]}]},{id:"s5",name:"Runners",cs:[{id:154,name:"Deploy раннера SUPERADMIN",s:5,p:4,pr:"Highest",a:true,tg:["regression","smoke"]},{id:158,name:"Снятие резерва с раннера",s:2,p:10,pr:"High",a:true,tg:["regression","smoke"]},{id:160,name:"Резервация раннера",s:2,p:10,pr:"Highest",a:true,tg:["regression","smoke"]},{id:157,name:"Удаление раннера SUPERADMIN",s:2,p:5,pr:"High",a:true,tg:["regression","smoke"]},{id:211,name:"Выход из рецепта → раннер освобождён",s:1,p:2,pr:"High",a:true,tg:["regression"]},{id:214,name:"Обновление страницы не освобождает раннер",s:2,p:3,pr:"High",a:true,tg:["regression","smoke"]},{id:576,name:"Привязка раннера организации",s:3,p:3,pr:"Highest",a:true,tg:["regression","smoke"]},{id:578,name:"Отвязка раннера от организации",s:1,p:3,pr:"Highest",a:true,tg:["regression","smoke"]},{id:220,name:"Закрытие вкладки рецепта",s:1,p:3,pr:"High",a:true,tg:["regression"]}]},{id:"s6",name:"Env Data",cs:[{id:342,name:"Модальное окно создания Api Key",s:1,p:0,pr:"High",a:true,tg:["regression","smoke"]},{id:343,name:"Модальное окно создания Login data",s:1,p:1,pr:"High",a:true,tg:["regression","smoke"]},{id:276,name:"Успешное создание env data",s:2,p:2,pr:"Highest",a:true,tg:["regression","smoke"]},{id:322,name:"Успешное редактирование Env Data",s:3,p:3,pr:"Highest",a:true,tg:["regression","smoke"]},{id:337,name:"Успешное удаление Env Data",s:3,p:1,pr:"Highest",a:true,tg:["regression","smoke"]},{id:336,name:"Успешное редактирование SUT URL",s:2,p:0,pr:"Highest",a:true,tg:["regression","smoke"]}]},{id:"s7",name:"Virtual Machines",cs:[{id:294,name:"Успешное добавление VM",s:4,p:0,pr:"High",a:false,tg:["regression","smoke"]},{id:295,name:"Неуспешное добавление VM",s:2,p:0,pr:"Medium",a:false,tg:["regression"]},{id:296,name:"Отображение VM SUPERADMIN",s:1,p:0,pr:"High",a:false,tg:["regression","smoke"]},{id:297,name:"Проверка коннекта до VM",s:2,p:1,pr:"High",a:false,tg:["regression","smoke"]},{id:298,name:"Получение ресурсов VM",s:1,p:1,pr:"High",a:false,tg:["regression","smoke"]}]}]},
+{id:"p1",name:"Строй-код",tc:3,secs:[{id:"p1s",name:"Подключения",cs:[{id:1001,name:"Создание ЛО / ТМ / пролет: успех",s:7,p:4,pr:"High",a:false,tg:[]},{id:1002,name:"Создание входящего подключения",s:11,p:2,pr:"High",a:false,tg:[]},{id:1003,name:"Создание ЛО / ТМ / пролет: дубль",s:7,p:4,pr:"Medium",a:false,tg:[]}]}]},
+{id:"p2",name:"Agima",tc:2,secs:[{id:"p2s",name:"Поиск и формы",cs:[{id:1004,name:"Множественный поиск на главной",s:4,p:1,pr:"Medium",a:false,tg:[]},{id:1005,name:"Проверка статичной формы захвата",s:6,p:1,pr:"Medium",a:false,tg:[]}]}]},
+{id:"p3",name:"DBA",tc:2,secs:[{id:"p3s",name:"Авторизация и записи",cs:[{id:1006,name:"Авторизация",s:5,p:2,pr:"Medium",a:false,tg:[]},{id:1007,name:"Редактирование полей ФО в записи",s:12,p:3,pr:"Medium",a:false,tg:[]}]}]},
+{id:"p4",name:"BPMobile",tc:5,secs:[{id:"p4s",name:"Регистрация",cs:[{id:1008,name:"Регистрация пользователя",s:5,p:0,pr:"Medium",a:false,tg:[]},{id:1009,name:"скролл-чек",s:2,p:0,pr:"Medium",a:false,tg:[]},{id:1010,name:"Авторизация и создание нового проекта",s:8,p:0,pr:"Medium",a:false,tg:[]},{id:1011,name:"Скачивание PDF → DOC",s:3,p:2,pr:"Medium",a:false,tg:[]},{id:1012,name:"Скачивание PDF → PDF",s:3,p:2,pr:"Medium",a:false,tg:[]}]}]},
+{id:"p5",name:"Askona",tc:2,secs:[{id:"p5s",name:"E2E сценарии",cs:[{id:1013,name:"Лимит на файлы для батч обработки",s:4,p:2,pr:"Medium",a:false,tg:[]},{id:1014,name:"Код верификации",s:6,p:2,pr:"Medium",a:false,tg:[]}]}]},
+{id:"p6",name:"Yclients",tc:9,secs:[{id:"p6s",name:"Каталог и заказы",cs:[{id:1015,name:"Сортировка в листинге",s:7,p:2,pr:"Medium",a:false,tg:[]},{id:1016,name:"Навигация по страницам",s:10,p:1,pr:"Medium",a:false,tg:[]},{id:1017,name:"Оформление заказа с доставкой на дом",s:15,p:1,pr:"Medium",a:false,tg:[]},{id:1018,name:"Избранное и сравнение",s:8,p:1,pr:"Medium",a:false,tg:[]},{id:1019,name:"Бронирование через все типы точек выдачи",s:43,p:1,pr:"Medium",a:false,tg:[]},{id:1020,name:"Авторизация",s:4,p:1,pr:"Medium",a:false,tg:[]},{id:1021,name:"Регистрация нового пользователя",s:6,p:1,pr:"Medium",a:false,tg:[]},{id:1022,name:"Добавление адреса",s:5,p:2,pr:"Medium",a:false,tg:[]},{id:1023,name:"Обзор корзины",s:3,p:2,pr:"Medium",a:false,tg:[]}]}]},
+{id:"p7",name:"HeadHunter Actors",tc:7,secs:[{id:"p7s",name:"Актёры и соискатели",cs:[{id:1024,name:"Регистрация актёра с неполным номером",s:4,p:3,pr:"Medium",a:false,tg:[]},{id:1025,name:"Проверка контента после создания в админке",s:12,p:2,pr:"Medium",a:false,tg:[]},{id:1026,name:"Авторизация соискателя",s:5,p:1,pr:"Medium",a:false,tg:[]},{id:1027,name:"Регистрация с существующим номером",s:4,p:1,pr:"Medium",a:false,tg:[]},{id:1028,name:"Регистрация нового соискателя",s:6,p:1,pr:"Medium",a:false,tg:[]},{id:1029,name:"Размещение вакансии работодателем",s:10,p:2,pr:"Medium",a:false,tg:[]},{id:1030,name:"Авторизация работодателя",s:4,p:1,pr:"Medium",a:false,tg:[]}]}]}
 ];
 
-let curP=null,curS=null,sel=new Set(),flt='all';
+let curP=null,curS=null,sel=new Set(),query='',prio='all';
 
 function rTree(){
-  document.getElementById('tree').innerHTML=P.map(p=>`<div class="tp" data-p="${p.id}"><div class="tp-h" onclick="tglP('${p.id}')"><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>${p.name}<span class="cnt">${p.tc}</span></div><div class="tp-secs"><div class="ts" data-p="${p.id}" data-s="__all" onclick="selS('${p.id}',null)">Все тест-кейсы<span class="sc">${p.tc}</span></div>${p.secs.map(s=>`<div class="ts" data-p="${p.id}" data-s="${s.id}" onclick="selS('${p.id}','${s.id}')">${s.name}<span class="sc">${s.cs.length}</span></div>`).join('')}</div></div>`).join('');
+  document.getElementById('tree').innerHTML=P.map(p=>`<div class="tp" data-p="${p.id}"><div class="tp-h" onclick="tglP('${p.id}')"><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>${p.name}<span class="cnt">${p.tc}</span></div><div class="tp-secs"><div class="ts" data-p="${p.id}" data-s="__all" onclick="selS('${p.id}',null)">Все<span class="sc">${p.tc}</span></div>${p.secs.map(s=>`<div class="ts" data-p="${p.id}" data-s="${s.id}" onclick="selS('${p.id}','${s.id}')">${s.name}<span class="sc">${s.cs.length}</span></div>`).join('')}</div></div>`).join('');
 }
 function tglP(id){const el=document.querySelector(`.tp[data-p="${id}"]`);const w=el.classList.contains('opn');document.querySelectorAll('.tp').forEach(p=>p.classList.remove('opn'));document.querySelectorAll('.tp-h').forEach(h=>{h.classList.remove('act','opn')});if(!w){el.classList.add('opn');const h=el.querySelector('.tp-h');h.classList.add('opn','act');selS(id,null)}}
 function selS(pid,sid){curP=pid;curS=sid;document.querySelectorAll('.ts').forEach(s=>s.classList.remove('act'));const s=sid?document.querySelector(`.ts[data-p="${pid}"][data-s="${sid}"]`):document.querySelector(`.ts[data-p="${pid}"][data-s="__all"]`);if(s)s.classList.add('act');rList()}
 
-function getC(){const p=P.find(x=>x.id===curP);if(!p)return[];let c=[];const ss=curS?p.secs.filter(s=>s.id===curS):p.secs;for(const s of ss)for(const tc of s.cs)c.push({...tc,sn:s.name});if(flt==='highest')c=c.filter(x=>x.pr==='Highest');else if(flt==='high')c=c.filter(x=>x.pr==='High'||x.pr==='Highest');else if(flt==='notauto')c=c.filter(x=>!x.a);return c}
+function getC(){
+  const p=P.find(x=>x.id===curP);if(!p)return[];
+  let c=[];const ss=curS?p.secs.filter(s=>s.id===curS):p.secs;
+  for(const s of ss)for(const tc of s.cs)c.push({...tc,sn:s.name});
+  // priority filter
+  if(prio!=='all')c=c.filter(x=>x.pr===prio);
+  // search by name, id, tags
+  if(query){const q=query.toLowerCase();c=c.filter(x=>x.name.toLowerCase().includes(q)||String(x.id).includes(q)||x.tg.some(t=>t.toLowerCase().includes(q)))}
+  return c;
+}
 
-function rList(){const w=document.getElementById('lst');const cs=getC();
-if(!curP){w.innerHTML='<div class="es"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><div class="et">Выберите проект слева</div><div>Тест-кейсы появятся здесь</div></div>';return}
-if(!cs.length){w.innerHTML='<div class="es"><div class="et">Нет тест-кейсов</div><div>Попробуйте сбросить фильтры</div></div>';return}
-const g={};for(const c of cs){if(!g[c.sn])g[c.sn]=[];g[c.sn].push(c)}
-let h='';for(const[sn,tcs]of Object.entries(g)){
-h+=`<div class="sg"><div class="sh">${sn}<span class="scb">${tcs.length}</span></div>`;
-for(const t of tcs){const ck=sel.has(t.id)?'checked':'';const sc=sel.has(t.id)?'sel':'';const tot=t.s+t.p;
-const pc=t.pr==='Highest'?'ph':t.pr==='High'?'pg':'pm';
-let bs=`<span class="rb ${pc}">${t.pr}</span>`;
-if(t.a)bs+=`<span class="rb au">Автоматиз.</span>`;
-for(const tg of t.tg.filter(x=>x!=='to-automate').slice(0,2))bs+=`<span class="rb tg">${tg}</span>`;
-h+=`<div class="row ${sc}" onclick="tgl(${t.id})"><input type="checkbox" class="cb" ${ck} onclick="event.stopPropagation();tgl(${t.id})"><div class="ri"><div class="rn">${t.name}</div><div class="rm"><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>${tot} шагов</span>${t.p>0?`<span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>${t.p} предусл.</span>`:''}</div></div><div class="rbs">${bs}</div></div>`}
-h+='</div>'}w.innerHTML=h;uSA()}
+function rList(){
+  const w=document.getElementById('lst');const cs=getC();
+  if(!curP){w.innerHTML='<div class="es"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><div class="et">Выберите проект слева</div><div>Тест-кейсы появятся здесь</div></div>';return}
+  if(!cs.length){w.innerHTML='<div class="es"><div class="et">Нет тест-кейсов</div><div>Попробуйте изменить фильтры или поиск</div></div>';return}
+  const g={};for(const c of cs){if(!g[c.sn])g[c.sn]=[];g[c.sn].push(c)}
+  let h='';
+  for(const[sn,tcs]of Object.entries(g)){
+    h+=`<div class="sg"><div class="sh">${sn}<span class="scb">${tcs.length}</span></div>`;
+    for(const t of tcs){
+      const ck=sel.has(t.id)?'checked':'';
+      const sc=sel.has(t.id)?'sel':'';
+      const isConflict=IMPORTED.has(t.id);
+      const cc=isConflict?'conflict':'';
+      const tot=t.s+t.p;
+      const pc=t.pr==='Highest'?'ph':t.pr==='High'?'pg':'pm';
+      let bs=`<span class="rb ${pc}">${t.pr}</span>`;
+      if(isConflict)bs+=`<span class="rb imp">Импортирован</span>`;
+      if(t.a)bs+=`<span class="rb au">Автоматиз.</span>`;
+      for(const tg of t.tg.filter(x=>x!=='to-automate').slice(0,2))bs+=`<span class="rb tg">${tg}</span>`;
+      h+=`<div class="row ${sc} ${cc}" onclick="tgl(${t.id})"><input type="checkbox" class="cb" ${ck} onclick="event.stopPropagation();tgl(${t.id})"><div class="ri"><div class="rn">${t.name} <span class="id-badge">#${t.id}</span></div><div class="rm"><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>${tot} шагов</span>${t.p>0?`<span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>${t.p} предусл.</span>`:''}</div></div><div class="rbs">${bs}</div></div>`;
+    }
+    h+='</div>';
+  }
+  w.innerHTML=h;uSA();
+}
 
 function tgl(id){if(sel.has(id))sel.delete(id);else sel.add(id);rList();uF()}
 function uF(){document.getElementById('sc').textContent=sel.size;document.getElementById('ib').disabled=sel.size===0}
 function uSA(){const cs=getC();document.getElementById('sa').checked=cs.length>0&&cs.every(c=>sel.has(c.id))}
 document.getElementById('sa').addEventListener('change',e=>{const cs=getC();if(e.target.checked)cs.forEach(c=>sel.add(c.id));else cs.forEach(c=>sel.delete(c.id));rList();uF()});
 function clr(){sel.clear();rList();uF()}
-document.querySelectorAll('.fp').forEach(p=>p.addEventListener('click',()=>{document.querySelectorAll('.fp').forEach(x=>x.classList.remove('on'));p.classList.add('on');flt=p.dataset.f;rList()}));
-document.getElementById('srch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.tp').forEach(p=>{let show=p.textContent.toLowerCase().includes(q);p.style.display=show?'':'none'})});
 
+// Search
+document.getElementById('qry').addEventListener('input',e=>{query=e.target.value;rList()});
+// Priority filter
+document.getElementById('prio').addEventListener('change',e=>{prio=e.target.value;rList()});
+
+// CONFIRMATION
 function showC(){
-  const all=[];const ps={};
-  for(const p of P)for(const s of p.secs)for(const c of s.cs)if(sel.has(c.id)){all.push(c);ps[p.name]=(ps[p.name]||0)+1}
-  const ts=all.reduce((s,c)=>s+c.s+c.p,0);const ac=all.filter(c=>c.a).length;const hc=all.filter(c=>c.pr==='Highest'||c.pr==='High').length;const big=all.filter(c=>(c.s+c.p)>15);
-  let b=`<div class="cs"><span class="l">Тест-кейсов</span><span class="v">${all.length}</span></div><div class="cs"><span class="l">Общее кол-во шагов</span><span class="v">${ts}</span></div><div class="cs"><span class="l">Уже автоматизированных</span><span class="v">${ac}</span></div><div class="cs"><span class="l">Высокий приоритет</span><span class="v">${hc}</span></div>`;
-  if(big.length)b+=`<div class="cw warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><div>${big.length} кейс(ов) содержат более 15 шагов — генерация может занять больше времени</div></div>`;
-  if(ac)b+=`<div class="cw info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><div>${ac} кейс(ов) уже автоматизированы — ре-импорт обновит существующие рецепты</div></div>`;
-  b+='<div class="cps">';for(const[n,c]of Object.entries(ps))b+=`<div class="cpr"><span class="n">${n}</span><span class="c">${c} TC</span></div>`;b+='</div>';
-  document.getElementById('cb').innerHTML=b;document.getElementById('ov').classList.add('show');document.getElementById('d2').classList.add('on');
+  const all=[];const ps={};let conflicts=0;
+  for(const p of P)for(const s of p.secs)for(const c of s.cs)if(sel.has(c.id)){all.push({...c,proj:p.name});if(!ps[p.name])ps[p.name]=0;ps[p.name]++;if(IMPORTED.has(c.id))conflicts++}
+  const big=all.filter(c=>(c.s+c.p)>15);
+  let b='';
+
+  // Conflicts warning
+  if(conflicts>0){
+    const conflictNames=all.filter(c=>IMPORTED.has(c.id)).map(c=>c.name).slice(0,3);
+    b+=`<div class="cw warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><div><strong>${conflicts} кейс(ов) уже импортированы.</strong> Существующие рецепты будут обновлены: шаги из TMS перезапишут текущие, статус сбросится в «Доработка».<br><span style="color:var(--text-muted);font-size:11px">${conflictNames.join(', ')}${conflicts>3?' и ещё '+(conflicts-3)+'…':''}</span></div></div>`;
+  }
+
+  // Big cases
+  if(big.length>0){
+    b+=`<div class="cw info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><div>${big.length} кейс(ов) содержат более 15 шагов — генерация может занять больше времени</div></div>`;
+  }
+
+  // Project breakdown
+  b+=`<div class="cps"><div class="cps-title">Импортируется</div>`;
+  for(const[n,c]of Object.entries(ps)){
+    b+=`<div class="cpr"><span class="n">${n}</span><span class="c">${c} тест-кейсов</span></div>`;
+  }
+  b+=`<div class="cpr" style="border:none;font-weight:600"><span class="n">Итого</span><span class="c" style="font-weight:600;color:var(--text)">${all.length} TC</span></div>`;
+  b+=`</div>`;
+
+  document.getElementById('cb').innerHTML=b;
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('d2').classList.add('on');
 }
 function hideC(){document.getElementById('ov').classList.remove('show');document.getElementById('d2').classList.remove('on')}
-function doImport(){hideC();alert('Импорт запущен! '+sel.size+' тест-кейсов')}
+function doImport(){hideC();alert('Импорт запущен! '+sel.size+' тест-кейсов будут импортированы в проект Sentinel.')}
 document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')hideC()});
 
 rTree();uF();
