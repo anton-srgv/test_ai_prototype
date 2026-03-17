@@ -9,7 +9,7 @@
 <style>
   :root {
     --bg: #F9F9FB; --bg-white: #ffffff; --bg-hover: #f5f5f7;
-    --border: rgba(0,0,0,0.07); --border-strong: rgba(0,0,0,0.10);
+    --border: rgba(0,0,0,0.07); --border-strong: rgba(0,0,0,0.12);
     --text: #1a1a1a; --text-secondary: #555; --text-muted: #888; --text-placeholder: #bbb;
     --accent: #1a1a1a; --accent-hover: #333;
     --green: #22c55e; --green-text: #15803d;
@@ -21,132 +21,133 @@
     --sans: 'Golos Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     --radius: 10px; --radius-sm: 6px; --radius-xs: 4px;
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.03);
-    --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.03);
-    --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.03);
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.03);
+    --transition: 0.15s cubic-bezier(0.4,0,0.2,1);
     --iconbar-w: 44px;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: var(--sans); background: var(--bg-white); color: var(--text); font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; height: 100vh; overflow: hidden; }
-  svg.lu { display: inline-block; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--bg-white);color:var(--text);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;height:100vh;overflow:hidden}
+  svg.lu{display:inline-block;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-  .topbar { height: 44px; display: flex; align-items: center; padding: 0 16px; gap: 10px; border-bottom: 1px solid var(--border); background: var(--bg-white); position: fixed; top: 0; left: 0; right: 0; z-index: 10; }
-  .topbar-back { width: 30px; height: 30px; border: none; background: transparent; border-radius: var(--radius-sm); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
-  .topbar-back:hover { background: var(--bg-hover); color: var(--text); }
-  .topbar-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
-  .topbar-breadcrumb a { color: var(--text-muted); text-decoration: none; }
-  .topbar-breadcrumb a:hover { color: var(--text-secondary); }
-  .topbar-breadcrumb .sep { font-size: 10px; }
-  .topbar-breadcrumb .current { color: var(--text-secondary); font-weight: 500; }
-  .topbar-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; margin-left: 8px; }
-  .topbar-status .sd { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; font-size: 12px; font-weight: 500; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--bg-white); color: var(--text-secondary); cursor: pointer; font-family: var(--sans); white-space: nowrap; transition: all var(--transition); box-shadow: var(--shadow-sm); }
-  .btn:hover { background: var(--bg-hover); color: var(--text); box-shadow: var(--shadow-md); }
-  .btn:active { transform: scale(0.98); }
-  .btn svg.lu { width: 13px; height: 13px; opacity: 0.5; }
-  .btn:hover svg.lu { opacity: 0.7; }
-  .btn.primary { background: var(--accent); border-color: transparent; color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
-  .btn.primary:hover { background: var(--accent-hover); }
-  .btn.primary svg.lu { opacity: 0.8; }
+  /* Tooltip */
+  [data-tip]{position:relative}
+  [data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:11px;font-weight:400;padding:4px 9px;border-radius:var(--radius-xs);white-space:nowrap;z-index:100;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 
-  .editor-layout { display: flex; height: calc(100vh - 44px); margin-top: 44px; }
+  .topbar{height:44px;display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid var(--border);background:var(--bg-white);position:fixed;top:0;left:0;right:0;z-index:10}
+  .topbar-back{width:30px;height:30px;border:none;background:transparent;border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+  .topbar-back:hover{background:var(--bg-hover);color:var(--text)}
+  .bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}
+  .bc a{color:var(--text-muted);text-decoration:none}.bc a:hover{color:var(--text-secondary)}
+  .bc .sep{font-size:10px}.bc .cur{color:var(--text-secondary);font-weight:500}
+  .topbar-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;margin-left:8px}
+  .topbar-status .sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;font-size:12px;font-weight:500;border-radius:var(--radius-sm);border:1px solid var(--border-strong);background:var(--bg-white);color:var(--text-secondary);cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all var(--transition);box-shadow:var(--shadow-sm)}
+  .btn:hover{background:var(--bg-hover);color:var(--text);box-shadow:var(--shadow-md)}
+  .btn:active{transform:scale(0.98)}
+  .btn svg.lu{width:13px;height:13px;opacity:.5}.btn:hover svg.lu{opacity:.7}
+  .btn.primary{background:var(--accent);border-color:transparent;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .btn.primary:hover{background:var(--accent-hover)}.btn.primary svg.lu{opacity:.8}
 
-  .iconbar { width: var(--iconbar-w); background: var(--bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 2px; flex-shrink: 0; }
-  .iconbar-btn { width: 34px; height: 34px; border: none; background: transparent; border-radius: var(--radius-sm); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition); position: relative; }
-  .iconbar-btn:hover { background: rgba(0,0,0,0.04); color: var(--text-secondary); }
-  .iconbar-btn.active { color: var(--text); background: rgba(0,0,0,0.06); }
-  .iconbar-btn.active::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2px; background: var(--text); border-radius: 0 2px 2px 0; }
+  .editor-layout{display:flex;height:calc(100vh - 44px);margin-top:44px}
 
-  .left-panel { width: 440px; flex-shrink: 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .panel-header { padding: 8px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--bg-white); height: 40px; }
-  .panel-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
-  .panel-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-  .tab-pane { display: none; height: 100%; flex-direction: column; }
-  .tab-pane.active { display: flex; }
+  .iconbar{width:var(--iconbar-w);background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:2px;flex-shrink:0}
+  .iconbar-btn{width:34px;height:34px;border:none;background:transparent;border-radius:var(--radius-sm);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition);position:relative}
+  .iconbar-btn:hover{background:rgba(0,0,0,.04);color:var(--text-secondary)}
+  .iconbar-btn.active{color:var(--text);background:rgba(0,0,0,.06)}
+  .iconbar-btn.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:var(--text);border-radius:0 2px 2px 0}
+
+  .left-panel{width:440px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+  .panel-header{padding:8px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;height:40px}
+  .panel-title{font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.03em}
+  .panel-content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+  .tab-pane{display:none;height:100%;flex-direction:column}.tab-pane.active{display:flex}
 
   /* ── STEPS ── */
-  .steps-list { flex: 1; padding: 8px 12px 24px; overflow-y: auto; }
-  .steps-list::-webkit-scrollbar { width: 5px; }
-  .steps-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
+  .steps-list{flex:1;padding:0 12px 24px;overflow-y:auto}
+  .steps-list::-webkit-scrollbar{width:5px}
+  .steps-list::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:3px}
 
-  /* Step divider with add button */
-  .step-divider { display: flex; align-items: center; justify-content: center; height: 16px; position: relative; }
-  .step-divider::before { content: ''; position: absolute; left: 16px; right: 16px; top: 50%; height: 1px; background: var(--border); }
-  .step-divider-btn { width: 20px; height: 20px; border: 1px solid var(--border); border-radius: 50%; background: var(--bg-white); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; opacity: 0; transition: all var(--transition); }
-  .step-divider:hover .step-divider-btn { opacity: 1; }
-  .step-divider-btn:hover { border-color: var(--border-strong); color: var(--text-secondary); box-shadow: var(--shadow-sm); }
+  /* Divider between steps */
+  .step-divider{display:flex;align-items:center;justify-content:center;height:20px;position:relative}
+  .step-divider::before{content:'';position:absolute;left:20px;right:20px;top:50%;height:1px;background:var(--border-strong)}
+  .step-divider-btn{width:20px;height:20px;border:1px solid var(--border-strong);border-radius:50%;background:var(--bg-white);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;opacity:0;transition:all var(--transition)}
+  .step-divider:hover .step-divider-btn{opacity:1}
+  .step-divider-btn:hover{border-color:var(--text-muted);color:var(--text-secondary);box-shadow:var(--shadow-sm)}
 
-  /* Step card */
-  .step { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-white); transition: border-color var(--transition), box-shadow var(--transition); position: relative; }
-  .step:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  /* Step card — no border, clean */
+  .step{position:relative;padding:0 4px}
 
-  .step-header { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,0.03); }
-  .step-label { font-size: 12.5px; font-weight: 600; color: var(--text); flex: 1; display: flex; align-items: center; gap: 6px; }
-  .step-summary { font-weight: 400; color: var(--text-muted); }
-  .step-status { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--radius-xs); }
-  .step-status.verified { color: var(--green-text); background: rgba(34,197,94,0.06); }
-  .step-status.draft { color: var(--text-muted); background: rgba(0,0,0,0.03); }
-  .step-status.generated { color: var(--blue-text); background: rgba(59,130,246,0.06); }
-  .step-status.error { color: var(--red-text); background: rgba(239,68,68,0.06); }
-  .step-status .ss-dot { width: 5px; height: 5px; border-radius: 50%; }
-  .step-status.verified .ss-dot { background: var(--green); }
-  .step-status.draft .ss-dot { background: var(--neutral); }
-  .step-status.generated .ss-dot { background: var(--blue); }
-  .step-status.error .ss-dot { background: var(--red); }
+  .step-header{display:flex;align-items:center;gap:6px;padding:10px 8px 8px}
+  .step-status-icon{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .step-status-icon.verified{color:var(--green)}
+  .step-status-icon.draft{color:var(--neutral)}
+  .step-status-icon.generated{color:var(--blue)}
+  .step-status-icon.error{color:var(--red)}
+  .step-label{font-size:12.5px;font-weight:600;color:var(--text);flex:1;display:flex;align-items:baseline;gap:5px}
+  .step-summary{font-weight:400;color:var(--text-muted);font-size:12px}
 
-  /* Hover actions on step */
-  .step-actions { display: flex; align-items: center; gap: 2px; opacity: 0; transition: opacity var(--transition); }
-  .step:hover .step-actions { opacity: 1; }
-  .step-act { width: 26px; height: 26px; border: none; background: transparent; border-radius: var(--radius-xs); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
-  .step-act:hover { background: rgba(0,0,0,0.05); color: var(--text-secondary); }
-  .step-act[title]:hover { color: var(--text); }
+  /* Hover actions */
+  .step-actions{display:flex;align-items:center;gap:1px;opacity:0;transition:opacity var(--transition)}
+  .step:hover .step-actions{opacity:1}
+  .step-act{width:26px;height:26px;border:none;background:transparent;border-radius:var(--radius-xs);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+  .step-act:hover{background:rgba(0,0,0,.05);color:var(--text)}
 
-  /* Action/assert blocks */
-  .step-block { margin: 8px 12px; }
-  .step-block-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; padding-left: 2px; }
-  .step-block-content { background: rgba(0,0,0,0.015); border-radius: var(--radius-xs); padding: 6px 10px; }
-  .step-block-content.assert-block { background: rgba(34,197,94,0.03); border-left: 2px solid rgba(34,197,94,0.3); }
+  /* TMS original text — collapsible */
+  .step-tms{margin:0 8px 6px;padding:8px 10px;background:rgba(0,0,0,.02);border-radius:var(--radius-xs);cursor:pointer;transition:background var(--transition)}
+  .step-tms:hover{background:rgba(0,0,0,.035)}
+  .step-tms-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+  .step-tms-label svg.lu{transition:transform var(--transition)}
+  .step-tms-label.open svg.lu{transform:rotate(90deg)}
+  .step-tms-text{font-size:12px;color:var(--text-secondary);line-height:1.6;margin-top:6px;padding-top:6px;border-top:1px solid rgba(0,0,0,.04);display:none;white-space:pre-wrap}
+  .step-tms-text.show{display:block}
 
-  .action-line { display: flex; align-items: center; gap: 5px; padding: 5px 0; flex-wrap: wrap; }
-  .action-text { font-size: 12.5px; color: var(--text); }
-  .action-chip { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; font-size: 11px; font-weight: 500; border-radius: 3px; white-space: nowrap; }
-  .action-chip.variable { background: rgba(234,179,8,0.08); color: var(--yellow-text); border: 1px solid rgba(234,179,8,0.15); }
-  .action-chip.locator { background: rgba(59,130,246,0.06); color: var(--blue-text); border: 1px solid rgba(59,130,246,0.12); }
-  .action-chip svg.lu { width: 10px; height: 10px; opacity: 0.6; }
+  /* Action/assert blocks — bordered, no bg */
+  .step-block{margin:0 8px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+  .step-block.assert-block{border-color:rgba(34,197,94,.25)}
+  .action-line{display:flex;align-items:center;gap:5px;padding:7px 10px;flex-wrap:wrap;border-bottom:1px solid rgba(0,0,0,.04)}
+  .action-line:last-child{border-bottom:none}
+  .action-text{font-size:12.5px;color:var(--text)}
+  .action-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;font-size:11px;font-weight:500;border-radius:3px;white-space:nowrap}
+  .action-chip.variable{background:rgba(234,179,8,.08);color:var(--yellow-text);border:1px solid rgba(234,179,8,.15)}
+  .action-chip.locator{background:rgba(59,130,246,.06);color:var(--blue-text);border:1px solid rgba(59,130,246,.12)}
+  .action-chip svg.lu{width:10px;height:10px;opacity:.6}
 
-  .step-footer { padding: 0 12px 8px; }
+  /* Dropdown menu */
+  .dropdown{display:none;position:absolute;right:8px;top:40px;background:var(--bg-white);border:1px solid var(--border-strong);border-radius:var(--radius-sm);box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px;min-width:220px;z-index:50}
+  .dropdown.show{display:block}
+  .dd-item{display:flex;align-items:center;gap:8px;padding:7px 12px;font-size:12.5px;color:var(--text-secondary);cursor:pointer;border-radius:var(--radius-xs);transition:background .1s}
+  .dd-item:hover{background:rgba(0,0,0,.04);color:var(--text)}
+  .dd-item.danger{color:var(--red-text)}.dd-item.danger:hover{background:rgba(239,68,68,.06)}
+  .dd-sep{height:1px;background:var(--border);margin:4px 8px}
 
   /* ── CODE ── */
-  .code-wrap { flex: 1; overflow: auto; }
-  .code-wrap pre { margin: 0; padding: 16px; font-size: 12px; line-height: 1.6; font-family: var(--mono); background: var(--bg-white) !important; }
-  .code-wrap code { font-family: var(--mono) !important; font-size: 12px !important; }
+  .code-wrap{flex:1;overflow:auto}
+  .code-wrap pre{margin:0;padding:16px;font-size:12px;line-height:1.6;font-family:var(--mono);background:var(--bg-white)!important}
+  .code-wrap code{font-family:var(--mono)!important;font-size:12px!important}
 
   /* ── LOGS ── */
-  .logs-wrap { flex: 1; overflow-y: auto; padding: 16px; font-family: var(--mono); font-size: 12px; line-height: 1.7; }
-  .log-entry { padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.03); }
-  .log-time { color: var(--text-muted); margin-right: 8px; }
-  .log-msg { color: var(--text); }
-  .log-msg.thinking { color: var(--blue-text); }
-  .log-msg.success { color: var(--green-text); }
-  .log-msg.error { color: var(--red-text); }
+  .logs-wrap{flex:1;overflow-y:auto;padding:16px;font-family:var(--mono);font-size:12px;line-height:1.7}
+  .log-entry{padding:5px 0;border-bottom:1px solid rgba(0,0,0,.03)}
+  .log-time{color:var(--text-muted);margin-right:8px}
+  .log-msg{color:var(--text)}.log-msg.thinking{color:var(--blue-text)}.log-msg.success{color:var(--green-text)}.log-msg.error{color:var(--red-text)}
 
   /* ── VARS ── */
-  .vars-wrap { flex: 1; overflow-y: auto; padding: 16px; }
-  .var-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.04); }
-  .var-key { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--yellow-text); background: rgba(234,179,8,0.06); padding: 2px 8px; border-radius: var(--radius-xs); }
-  .var-eq { color: var(--text-muted); }
-  .var-val { font-family: var(--mono); font-size: 12px; color: var(--text); background: rgba(0,0,0,0.03); padding: 2px 8px; border-radius: var(--radius-xs); }
-  .add-btn { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px; margin-top: 12px; border: 1px dashed rgba(0,0,0,0.12); border-radius: var(--radius-sm); color: var(--text-muted); font-size: 12px; font-weight: 500; cursor: pointer; background: transparent; font-family: var(--sans); transition: all var(--transition); }
-  .add-btn:hover { border-color: rgba(0,0,0,0.2); color: var(--text-secondary); }
+  .vars-wrap{flex:1;overflow-y:auto;padding:16px}
+  .var-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.04)}
+  .var-key{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--yellow-text);background:rgba(234,179,8,.06);padding:2px 8px;border-radius:var(--radius-xs)}
+  .var-eq{color:var(--text-muted)}.var-val{font-family:var(--mono);font-size:12px;color:var(--text);background:rgba(0,0,0,.03);padding:2px 8px;border-radius:var(--radius-xs)}
+  .add-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;margin-top:12px;border:1px dashed rgba(0,0,0,.12);border-radius:var(--radius-sm);color:var(--text-muted);font-size:12px;font-weight:500;cursor:pointer;background:transparent;font-family:var(--sans);transition:all var(--transition)}
+  .add-btn:hover{border-color:rgba(0,0,0,.2);color:var(--text-secondary)}
 
   /* ── PREVIEW ── */
-  .preview-panel { flex: 1; display: flex; flex-direction: column; background: var(--bg); overflow: hidden; }
-  .url-bar { display: flex; align-items: center; gap: 8px; margin: 12px 16px; padding: 7px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-white); font-family: var(--mono); font-size: 12px; color: var(--text-secondary); box-shadow: var(--shadow-sm); }
-  .url-bar svg.lu { width: 13px; height: 13px; color: var(--text-muted); }
-  .browser-frame { flex: 1; margin: 0 16px 16px; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; background: var(--bg-white); box-shadow: var(--shadow-card); display: flex; align-items: center; justify-content: center; }
-  .browser-placeholder { text-align: center; color: var(--text-muted); padding: 48px; }
-  .browser-placeholder svg.lu { opacity: 0.2; margin-bottom: 12px; }
+  .preview-panel{flex:1;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+  .url-bar{display:flex;align-items:center;gap:8px;margin:12px 16px;padding:7px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-white);font-family:var(--mono);font-size:12px;color:var(--text-secondary);box-shadow:var(--shadow-sm)}
+  .url-bar svg.lu{width:13px;height:13px;color:var(--text-muted)}
+  .browser-frame{flex:1;margin:0 16px 16px;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:var(--bg-white);box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center}
+  .browser-placeholder{text-align:center;color:var(--text-muted);padding:48px}
+  .browser-placeholder svg.lu{opacity:.2;margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -165,188 +166,192 @@
   <symbol id="i-braces" viewBox="0 0 24 24"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></symbol>
   <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
   <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></symbol>
+  <symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></symbol>
+  <symbol id="i-chr" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-rewind" viewBox="0 0 24 24"><polygon points="11 19 2 12 11 5 11 19"/><polygon points="22 19 13 12 22 5 22 19"/></symbol>
+  <symbol id="i-fast-forward" viewBox="0 0 24 24"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+  <symbol id="i-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></symbol>
 </svg>
 
 <div class="topbar">
-  <button class="topbar-back" onclick="window.location.href='index.html'"><svg class="lu" width="16" height="16"><use href="#i-arrow-left"/></svg></button>
-  <div class="topbar-breadcrumb">
+  <button class="topbar-back" onclick="window.location.href='index.html'" data-tip="Назад к списку"><svg class="lu" width="16" height="16"><use href="#i-arrow-left"/></svg></button>
+  <div class="bc">
     <a href="index.html">Тест-кейсы</a><span class="sep">›</span>
     <a href="index.html">Авторизация</a><span class="sep">›</span>
-    <span class="current">Авторизация через Google OAuth</span>
+    <span class="cur">Авторизация через Google OAuth</span>
   </div>
-  <div class="topbar-status" style="color:var(--yellow-text);"><span class="sd" style="background:var(--yellow);"></span>Доработка</div>
-  <div class="topbar-right">
-    <button class="btn">Экспорт</button>
-  </div>
+  <div class="topbar-status" style="color:var(--yellow-text)"><span class="sd" style="background:var(--yellow)"></span>Доработка</div>
+  <div class="topbar-right"><button class="btn">Экспорт</button></div>
 </div>
 
 <div class="editor-layout">
   <div class="iconbar">
-    <button class="iconbar-btn active" data-tab="editor" title="Редактор"><svg class="lu" width="18" height="18"><use href="#i-edit"/></svg></button>
-    <button class="iconbar-btn" data-tab="code" title="Код"><svg class="lu" width="18" height="18"><use href="#i-code"/></svg></button>
-    <button class="iconbar-btn" data-tab="logs" title="Логи агента"><svg class="lu" width="18" height="18"><use href="#i-logs"/></svg></button>
-    <button class="iconbar-btn" data-tab="vars" title="Переменные"><svg class="lu" width="18" height="18"><use href="#i-braces"/></svg></button>
+    <button class="iconbar-btn active" data-tab="editor" data-tip="Редактор"><svg class="lu" width="18" height="18"><use href="#i-edit"/></svg></button>
+    <button class="iconbar-btn" data-tab="code" data-tip="Код"><svg class="lu" width="18" height="18"><use href="#i-code"/></svg></button>
+    <button class="iconbar-btn" data-tab="logs" data-tip="Логи агента"><svg class="lu" width="18" height="18"><use href="#i-logs"/></svg></button>
+    <button class="iconbar-btn" data-tab="vars" data-tip="Переменные"><svg class="lu" width="18" height="18"><use href="#i-braces"/></svg></button>
   </div>
 
   <div class="left-panel">
     <div class="panel-header">
       <span class="panel-title" id="panel-title-text">Редактор</span>
-      <div id="panel-play-btn">
-        <button class="btn primary" style="padding:5px 10px; font-size:11px;"><svg class="lu" width="12" height="12"><use href="#i-play"/></svg>Воспроизвести</button>
-      </div>
+      <div id="panel-play-btn"><button class="btn primary" style="padding:5px 10px;font-size:11px"><svg class="lu" width="12" height="12"><use href="#i-play"/></svg>Воспроизвести</button></div>
     </div>
     <div class="panel-content">
 
-      <!-- Editor tab -->
+      <!-- Editor -->
       <div class="tab-pane active" id="pane-editor">
         <div class="steps-list">
 
           <!-- Step 1 -->
+          <div class="step-divider" style="height:8px"></div>
           <div class="step">
             <div class="step-header">
+              <span class="step-status-icon verified" data-tip="Подтверждён"><svg class="lu" width="16" height="16"><use href="#i-check-circle"/></svg></span>
               <div class="step-label">Шаг 1 <span class="step-summary">— Авторизация</span></div>
               <div class="step-actions">
-                <button class="step-act" title="Воспроизвести до этого шага"><svg class="lu" width="14" height="14"><use href="#i-play"/></svg></button>
-                <button class="step-act" title="Сгенерировать шаг"><svg class="lu" width="14" height="14"><use href="#i-zap"/></svg></button>
-                <button class="step-act" title="Ещё"><svg class="lu" width="14" height="14"><use href="#i-dots"/></svg></button>
+                <button class="step-act" data-tip="Воспроизвести до этого шага"><svg class="lu" width="14" height="14"><use href="#i-play"/></svg></button>
+                <button class="step-act" data-tip="Сгенерировать шаг"><svg class="lu" width="14" height="14"><use href="#i-zap"/></svg></button>
+                <button class="step-act step-more-btn" data-tip="Ещё"><svg class="lu" width="14" height="14"><use href="#i-dots"/></svg></button>
               </div>
-              <span class="step-status verified"><span class="ss-dot"></span>Подтверждён</span>
+              <div class="dropdown">
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-fast-forward"/></svg>Генерация с этого шага</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-mic"/></svg>Записать вручную</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-plus-circle"/></svg>Добавить проверку</div>
+                <div class="dd-sep"></div>
+                <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить результаты</div>
+                <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
+              </div>
             </div>
+            <!-- TMS original -->
+            <div class="step-tms" onclick="this.querySelector('.step-tms-text').classList.toggle('show');this.querySelector('.step-tms-label').classList.toggle('open')">
+              <div class="step-tms-label"><svg class="lu" width="12" height="12"><use href="#i-chr"/></svg>Оригинал из TMS</div>
+              <div class="step-tms-text">Действие: Ввести логин и пароль, нажать кнопку Login
+Ожидаемый результат: Пользователь авторизован, открыта главная страница</div>
+            </div>
+            <!-- Generated actions -->
             <div class="step-block">
-              <div class="step-block-label">Действия</div>
-              <div class="step-block-content">
-                <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>login</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле username</span></div>
-                <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>pass</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле password</span></div>
-                <div class="action-line"><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Login</span></div>
-              </div>
+              <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>login</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле username</span></div>
+              <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>pass</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле password</span></div>
+              <div class="action-line"><span class="action-text">Нажать на</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Login</span></div>
             </div>
-            <div class="step-footer"></div>
           </div>
 
-          <!-- Divider -->
-          <div class="step-divider"><button class="step-divider-btn"><svg class="lu" width="10" height="10"><use href="#i-plus"/></svg></button></div>
+          <div class="step-divider"><button class="step-divider-btn" data-tip="Добавить шаг"><svg class="lu" width="10" height="10"><use href="#i-plus"/></svg></button></div>
 
           <!-- Step 2 -->
           <div class="step">
             <div class="step-header">
+              <span class="step-status-icon verified" data-tip="Подтверждён"><svg class="lu" width="16" height="16"><use href="#i-check-circle"/></svg></span>
               <div class="step-label">Шаг 2 <span class="step-summary">— Изменение имени</span></div>
               <div class="step-actions">
-                <button class="step-act" title="Воспроизвести до этого шага"><svg class="lu" width="14" height="14"><use href="#i-play"/></svg></button>
-                <button class="step-act" title="Сгенерировать шаг"><svg class="lu" width="14" height="14"><use href="#i-zap"/></svg></button>
-                <button class="step-act" title="Ещё"><svg class="lu" width="14" height="14"><use href="#i-dots"/></svg></button>
+                <button class="step-act" data-tip="Воспроизвести до этого шага"><svg class="lu" width="14" height="14"><use href="#i-play"/></svg></button>
+                <button class="step-act" data-tip="Сгенерировать шаг"><svg class="lu" width="14" height="14"><use href="#i-zap"/></svg></button>
+                <button class="step-act step-more-btn" data-tip="Ещё"><svg class="lu" width="14" height="14"><use href="#i-dots"/></svg></button>
               </div>
-              <span class="step-status verified"><span class="ss-dot"></span>Подтверждён</span>
+              <div class="dropdown">
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-fast-forward"/></svg>Генерация с этого шага</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-mic"/></svg>Записать вручную</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-plus-circle"/></svg>Добавить проверку</div>
+                <div class="dd-sep"></div>
+                <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить результаты</div>
+                <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
+              </div>
+            </div>
+            <div class="step-tms" onclick="this.querySelector('.step-tms-text').classList.toggle('show');this.querySelector('.step-tms-label').classList.toggle('open')">
+              <div class="step-tms-label"><svg class="lu" width="12" height="12"><use href="#i-chr"/></svg>Оригинал из TMS</div>
+              <div class="step-tms-text">Действие: Ввести новое имя в поле name
+Ожидаемый результат: Кнопка Save активна, нажать Save</div>
             </div>
             <div class="step-block">
-              <div class="step-block-label">Действия</div>
-              <div class="step-block-content">
-                <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>new-name</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле name</span></div>
-              </div>
+              <div class="action-line"><span class="action-text">Ввести значение</span><span class="action-chip variable"><svg class="lu"><use href="#i-variable"/></svg>new-name</span><span class="action-text">в</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>поле name</span></div>
             </div>
-            <div class="step-block">
-              <div class="step-block-label">Проверки</div>
-              <div class="step-block-content assert-block">
-                <div class="action-line"><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Save</span><span class="action-text">— Нажать на 'Save'</span></div>
-              </div>
+            <div class="step-block assert-block">
+              <div class="action-line"><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>кнопка Save</span><span class="action-text">— Нажать на 'Save'</span></div>
             </div>
-            <div class="step-footer"></div>
           </div>
 
-          <div class="step-divider"><button class="step-divider-btn"><svg class="lu" width="10" height="10"><use href="#i-plus"/></svg></button></div>
+          <div class="step-divider"><button class="step-divider-btn" data-tip="Добавить шаг"><svg class="lu" width="10" height="10"><use href="#i-plus"/></svg></button></div>
 
           <!-- Step 3 -->
           <div class="step">
             <div class="step-header">
+              <span class="step-status-icon verified" data-tip="Подтверждён"><svg class="lu" width="16" height="16"><use href="#i-check-circle"/></svg></span>
               <div class="step-label">Шаг 3 <span class="step-summary">— Проверка сохранения</span></div>
               <div class="step-actions">
-                <button class="step-act" title="Воспроизвести до этого шага"><svg class="lu" width="14" height="14"><use href="#i-play"/></svg></button>
-                <button class="step-act" title="Сгенерировать шаг"><svg class="lu" width="14" height="14"><use href="#i-zap"/></svg></button>
-                <button class="step-act" title="Ещё"><svg class="lu" width="14" height="14"><use href="#i-dots"/></svg></button>
+                <button class="step-act" data-tip="Воспроизвести до этого шага"><svg class="lu" width="14" height="14"><use href="#i-play"/></svg></button>
+                <button class="step-act" data-tip="Сгенерировать шаг"><svg class="lu" width="14" height="14"><use href="#i-zap"/></svg></button>
+                <button class="step-act step-more-btn" data-tip="Ещё"><svg class="lu" width="14" height="14"><use href="#i-dots"/></svg></button>
               </div>
-              <span class="step-status verified"><span class="ss-dot"></span>Подтверждён</span>
-            </div>
-            <div class="step-block">
-              <div class="step-block-label">Проверки</div>
-              <div class="step-block-content assert-block">
-                <div class="action-line"><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>уведомление «Сохранено»</span><span class="action-text">отображается</span></div>
+              <div class="dropdown">
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-fast-forward"/></svg>Генерация с этого шага</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-mic"/></svg>Записать вручную</div>
+                <div class="dd-item"><svg class="lu" width="14" height="14"><use href="#i-plus-circle"/></svg>Добавить проверку</div>
+                <div class="dd-sep"></div>
+                <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить результаты</div>
+                <div class="dd-item danger"><svg class="lu" width="14" height="14"><use href="#i-trash"/></svg>Удалить шаг</div>
               </div>
             </div>
-            <div class="step-footer"></div>
+            <div class="step-tms" onclick="this.querySelector('.step-tms-text').classList.toggle('show');this.querySelector('.step-tms-label').classList.toggle('open')">
+              <div class="step-tms-label"><svg class="lu" width="12" height="12"><use href="#i-chr"/></svg>Оригинал из TMS</div>
+              <div class="step-tms-text">Действие: Проверить уведомление
+Ожидаемый результат: Отображается уведомление «Сохранено»</div>
+            </div>
+            <div class="step-block assert-block">
+              <div class="action-line"><span class="action-text">Проверить что</span><span class="action-chip locator"><svg class="lu"><use href="#i-target"/></svg>уведомление «Сохранено»</span><span class="action-text">отображается</span></div>
+            </div>
           </div>
 
-          <div class="step-divider"><button class="step-divider-btn"><svg class="lu" width="10" height="10"><use href="#i-plus"/></svg></button></div>
+          <div class="step-divider"><button class="step-divider-btn" data-tip="Добавить шаг"><svg class="lu" width="10" height="10"><use href="#i-plus"/></svg></button></div>
 
         </div>
       </div>
 
-      <!-- Code tab -->
+      <!-- Code -->
       <div class="tab-pane" id="pane-code">
         <div class="code-wrap"><pre><code class="language-javascript">const { test, expect } = require('@playwright/test');
 const { testit } = require('testit-adapter-playwright');
-/**
- * @externalId 596
- * @recipeId 019cf6e9-2298-7660-b98d-167abdd032d5
- * @title Авторизация в Test IT
- * @description Кейс проверки авторизации в Test IT
- */
+
 test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ page }) =&gt; {
   testit.workItemIds(['596']);
-
   await page.goto('/');
 
-  // Step 1: Перейти на страницу "Проекты"
-  await page.click('a[href="/projects"]');
-  await expect(page).toHaveURL(/projects/);
-
-  // Step 2: Нажать на кнопку создания проекта
-  await page.click('button:has-text("Создать проект")');
-  await expect(page.locator('.modal')).toBeVisible();
-
-  // Step 3: Заполнить все поля
-  await page.fill('[name="projectName"]', 'Test Project');
-  await page.fill('[name="projectCode"]', 'TP');
-
-  // Step 4: Нажать кнопку "Сохранить"
-  await page.click('button:has-text("Сохранить")');
-  await expect(page.locator('.modal')).not.toBeVisible();
-
-  // Step 5: Перейти на страницу авторизации
-  await page.goto('/login');
-
-  // Step 6: Ввести %Login
+  // Step 1: Авторизация
   await page.fill('#username', process.env.LOGIN);
-
-  // Step 7: Ввести %Password
   await page.fill('#password', process.env.PASSWORD);
+  await page.click('button:has-text("Login")');
 
-  // Step 8: Нажать кнопку Войти
-  await page.click('button:has-text("Войти")');
-  await expect(page.locator('.project-areas')).toBeVisible();
+  // Step 2: Изменение имени
+  await page.fill('[name="name"]', 'Test Project Alpha');
+  await page.click('button:has-text("Save")');
 
-  // Step 9: Удалить локального пользователя
-  await page.request.delete('/api/users/local');
+  // Step 3: Проверка сохранения
+  await expect(page.locator('.notification')).toContainText('Сохранено');
 });</code></pre></div>
       </div>
 
-      <!-- Logs tab -->
+      <!-- Logs -->
       <div class="tab-pane" id="pane-logs">
         <div class="logs-wrap">
-          <div class="log-entry"><span class="log-time">10:05:12</span><span class="log-msg thinking">Анализирую шаг 1: «Перейти на страницу Проекты»…</span></div>
-          <div class="log-entry"><span class="log-time">10:05:14</span><span class="log-msg">Ищу навигацию по тексту «Проекты» в sidebar</span></div>
-          <div class="log-entry"><span class="log-time">10:05:15</span><span class="log-msg success">✓ Найден: a[href="/projects"]</span></div>
-          <div class="log-entry"><span class="log-time">10:05:16</span><span class="log-msg">Генерирую: await page.click('a[href="/projects"]')</span></div>
-          <div class="log-entry"><span class="log-time">10:05:17</span><span class="log-msg thinking">Анализирую шаг 2: «Нажать на кнопку создания»…</span></div>
-          <div class="log-entry"><span class="log-time">10:05:19</span><span class="log-msg success">✓ Найден: button:has-text("Создать проект")</span></div>
-          <div class="log-entry"><span class="log-time">10:05:22</span><span class="log-msg thinking">Анализирую шаг 5: «Перейти на страницу авторизации»…</span></div>
-          <div class="log-entry"><span class="log-time">10:05:24</span><span class="log-msg error">⚠ Ссылка на вложение — не удалось определить URL</span></div>
-          <div class="log-entry"><span class="log-time">10:05:25</span><span class="log-msg">Fallback: await page.goto('/login')</span></div>
+          <div class="log-entry"><span class="log-time">10:05:12</span><span class="log-msg thinking">Анализирую шаг 1: «Авторизация»…</span></div>
+          <div class="log-entry"><span class="log-time">10:05:14</span><span class="log-msg">Ищу поле username на странице</span></div>
+          <div class="log-entry"><span class="log-time">10:05:15</span><span class="log-msg success">✓ Найден: #username</span></div>
+          <div class="log-entry"><span class="log-time">10:05:16</span><span class="log-msg">Генерирую: await page.fill('#username', ...)</span></div>
+          <div class="log-entry"><span class="log-time">10:05:17</span><span class="log-msg thinking">Анализирую шаг 2: «Изменение имени»…</span></div>
+          <div class="log-entry"><span class="log-time">10:05:19</span><span class="log-msg success">✓ Найден: [name="name"]</span></div>
+          <div class="log-entry"><span class="log-time">10:05:22</span><span class="log-msg thinking">Анализирую шаг 3: «Проверка сохранения»…</span></div>
+          <div class="log-entry"><span class="log-time">10:05:24</span><span class="log-msg error">⚠ Нестабильный локатор .notification — может быть динамическим</span></div>
+          <div class="log-entry"><span class="log-time">10:05:25</span><span class="log-msg">Используем: page.locator('.notification')</span></div>
         </div>
       </div>
 
-      <!-- Variables tab -->
+      <!-- Variables -->
       <div class="tab-pane" id="pane-vars">
         <div class="vars-wrap">
-          <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; color:var(--text-muted); margin-bottom:12px;">Тестовые переменные</div>
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--text-muted);margin-bottom:12px">Тестовые переменные</div>
           <div class="var-row"><span class="var-key">login</span><span class="var-eq">=</span><span class="var-val">admin@testit.com</span></div>
           <div class="var-row"><span class="var-key">pass</span><span class="var-eq">=</span><span class="var-val">••••••••</span></div>
           <div class="var-row"><span class="var-key">new-name</span><span class="var-eq">=</span><span class="var-val">Test Project Alpha</span></div>
@@ -372,7 +377,7 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>
   const panelPlay = document.getElementById('panel-play-btn');
-  const titles = { editor:'Редактор', code:'Код', logs:'Логи агента', vars:'Переменные' };
+  const titles = {editor:'Редактор',code:'Код',logs:'Логи агента',vars:'Переменные'};
 
   document.querySelectorAll('.iconbar-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -384,6 +389,19 @@ test('Авторизация в Test IT', { tag: ['@regression'] }, async ({ pag
       document.getElementById('panel-title-text').textContent = titles[tab] || '';
       panelPlay.style.display = tab === 'editor' ? '' : 'none';
     });
+  });
+
+  // Dropdown menus
+  document.querySelectorAll('.step-more-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dd = btn.closest('.step-header').querySelector('.dropdown');
+      document.querySelectorAll('.dropdown.show').forEach(d => { if (d !== dd) d.classList.remove('show'); });
+      dd.classList.toggle('show');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown.show').forEach(d => d.classList.remove('show'));
   });
 
   if (typeof hljs !== 'undefined') hljs.highlightAll();
